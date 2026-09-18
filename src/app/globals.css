@@ -1,0 +1,83 @@
+@import "tailwindcss";
+
+/*
+  Tema claro. A paleta sai da própria logo: dourado envelhecido, marrom do
+  lettering e o creme do papel. Luz, não escuridão — é um site de arte sacra.
+*/
+@theme {
+  --color-branco: #ffffff;
+  --color-pergaminho: #fdfbf7;
+  --color-creme: #f7f1e6;
+  --color-creme-escuro: #efe5d4;
+
+  --color-ouro: #b0862f;
+  --color-ouro-claro: #c9a227;
+  --color-ouro-escuro: #8c6529;
+
+  --color-tinta: #3a2a1a;
+  --color-tinta-suave: #6b5540;
+  --color-tinta-fraca: #948069;
+
+  --font-display: var(--font-cormorant), Georgia, "Times New Roman", serif;
+  --font-corpo: var(--font-inter), system-ui, -apple-system, sans-serif;
+}
+
+html {
+  color-scheme: light;
+}
+
+body {
+  background: var(--color-branco);
+  color: var(--color-tinta);
+  font-family: var(--font-corpo);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+
+/* Filete dourado entre seções, igual ao traço da logo. */
+.filete-ouro {
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    var(--color-ouro) 20%,
+    var(--color-ouro) 80%,
+    transparent
+  );
+  opacity: 0.35;
+}
+
+/* Brilho quente e discreto atrás da peça em destaque. */
+.halo-ouro {
+  background: radial-gradient(
+    ellipse at center,
+    color-mix(in srgb, var(--color-ouro) 10%, transparent) 0%,
+    transparent 70%
+  );
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+::selection {
+  background: color-mix(in srgb, var(--color-ouro) 25%, transparent);
+  color: var(--color-tinta);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-ouro);
+  outline-offset: 2px;
+}
