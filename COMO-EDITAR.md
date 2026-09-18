@@ -15,7 +15,7 @@ whatsapp: "5500000000000",   // ← seu número: 55 + DDD + número, só dígito
 instagram: "atelie.artesacra",
 email: "contato@atelieartesacra.com.br",
 cidade: "Sua Cidade - UF",
-url: "https://www.atelieartesacra.com.br",  // ← domínio final
+url: "https://atelieartesacra.com.br",  // ✅ já configurado
 ```
 
 O WhatsApp é o mais importante: sem ele, todos os botões de "falar com a gente"
@@ -152,7 +152,24 @@ O jeito mais simples é a [Vercel](https://vercel.com) (gratuita para este caso)
    arquivo `.env`.)
 3. Deploy. A cada `git push`, o site atualiza sozinho.
 
-Depois, em **Settings → Domains**, você liga o domínio próprio.
+### Domínio próprio
+
+O domínio **atelieartesacra.com.br** já está ligado ao projeto na Vercel e os
+registros de DNS já foram criados no Registro.br:
+
+| Tipo | Nome | Valor |
+|---|---|---|
+| A | `@` (vazio) | `76.76.21.21` |
+| CNAME | `www` | `cname.vercel-dns.com` |
+
+O `www` redireciona para o endereço sem `www`, que é o oficial.
+
+Se algum dia a Vercel pedir valores diferentes (ela está migrando para
+`216.150.1.1` e um CNAME próprio do projeto), os antigos continuam
+funcionando — só troque se der problema.
+
+O certificado HTTPS é emitido sozinho pela Vercel, sem custo, assim que o DNS
+propaga. Não precisa fazer nada.
 
 ---
 
