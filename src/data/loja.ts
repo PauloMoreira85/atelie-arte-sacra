@@ -19,8 +19,10 @@ export const LOJA = {
   // TROCAR: cidade/UF de onde saem os envios
   cidade: "Sua Cidade - UF",
 
-  // TROCAR: domínio final. Usado nas tags de compartilhamento e no sitemap.
-  url: "https://www.atelieartesacra.com.br",
+  // Domínio de produção. Usado nas tags de compartilhamento e no sitemap.
+  // Sem "www": o www redireciona para cá, então usar a forma canônica evita
+  // que o Google indexe URLs que só redirecionam.
+  url: "https://atelieartesacra.com.br",
 
   /** Frete grátis a partir deste valor, em centavos. */
   freteGratisAcima: 30000,
