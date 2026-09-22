@@ -4,8 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
-    "start": "next start"
+    "build": "node verificar-imagens.mjs && next build",
+    "start": "next start",
+    "verificar-imagens": "node verificar-imagens.mjs"
   },
   "dependencies": {
     "next": "16.3.5",

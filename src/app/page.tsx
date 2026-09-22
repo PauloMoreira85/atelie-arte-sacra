@@ -49,7 +49,7 @@ export default function Home() {
           <div className="relative aspect-square">
             <div className="halo-ouro absolute inset-0 scale-125" />
             <Image
-              src="/produtos/anjo-luminaria-acesa.webp"
+              src="/produtos/anjo-luminaria.webp"
               alt="Anjo Luminária acesa, em luz quente"
               fill
               sizes="(max-width: 1024px) 100vw, 50vw"
