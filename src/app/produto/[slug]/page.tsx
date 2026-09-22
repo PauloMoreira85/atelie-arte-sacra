@@ -39,7 +39,7 @@ export default async function ProdutoPage({ params }: Props) {
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
-      <nav className="mb-8 text-sm text-tinta-fraca">
+      <nav className="mb-8 text-sm text-creme-fraco">
         <Link href="/loja" className="hover:text-ouro-claro">
           Loja
         </Link>
@@ -51,7 +51,7 @@ export default async function ProdutoPage({ params }: Props) {
           {CATEGORIAS[produto.categoria].nome}
         </Link>
         <span className="mx-2">/</span>
-        <span className="text-tinta-suave">{produto.nome}</span>
+        <span className="text-creme-suave">{produto.nome}</span>
       </nav>
 
       <CompraProduto produto={produto} />
@@ -59,7 +59,7 @@ export default async function ProdutoPage({ params }: Props) {
       {relacionados.length > 0 && (
         <section className="mt-24">
           <div className="filete-ouro mb-12" />
-          <h2 className="mb-8 font-display text-3xl text-tinta">
+          <h2 className="mb-8 font-display text-3xl text-creme">
             Você também pode gostar
           </h2>
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">

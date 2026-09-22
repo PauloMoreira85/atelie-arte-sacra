@@ -32,7 +32,7 @@ export function CompraProduto({ produto }: { produto: Produto }) {
       {/* Galeria */}
       <div>
         <div
-          className="relative aspect-square overflow-hidden rounded-xl border border-ouro/15 bg-pergaminho"
+          className="relative aspect-square overflow-hidden rounded-xl border border-ouro/15 bg-carvao"
           style={fundo}
         >
           {!produto.fundoCard && <div className="halo-ouro absolute inset-0" />}
@@ -56,7 +56,7 @@ export function CompraProduto({ produto }: { produto: Produto }) {
                 aria-label={`Foto ${i + 1} de ${produto.nome}`}
                 aria-current={i === imagemAtiva}
                 style={fundo}
-                className={`relative h-20 w-20 overflow-hidden rounded-lg border bg-pergaminho transition-colors ${
+                className={`relative h-20 w-20 overflow-hidden rounded-lg border bg-carvao transition-colors ${
                   i === imagemAtiva
                     ? "border-ouro"
                     : "border-ouro/15 hover:border-ouro/50"
@@ -77,20 +77,20 @@ export function CompraProduto({ produto }: { produto: Produto }) {
 
       {/* Compra */}
       <div>
-        <h1 className="font-display text-4xl leading-tight text-tinta">
+        <h1 className="font-display text-4xl leading-tight text-creme">
           {produto.nome}
         </h1>
 
         <p className="mt-4 text-3xl text-ouro-claro">
           {formatarPreco(produto.preco)}
         </p>
-        <p className="mt-1 text-sm text-tinta-fraca">
+        <p className="mt-1 text-sm text-creme-fraco">
           em até 6x sem juros no cartão · Pix com desconto no checkout
         </p>
 
         <div className="my-7 filete-ouro" />
 
-        <div className="space-y-4 text-[15px] leading-relaxed text-tinta-suave">
+        <div className="space-y-4 text-[15px] leading-relaxed text-creme-suave">
           {produto.descricao.map((p) => (
             <p key={p.slice(0, 32)}>{p}</p>
           ))}
@@ -111,7 +111,7 @@ export function CompraProduto({ produto }: { produto: Produto }) {
                   className={`rounded-full border px-4 py-2 text-sm transition-colors ${
                     a === acabamento
                       ? "border-ouro bg-ouro/10 text-ouro-claro"
-                      : "border-ouro/25 text-tinta-suave hover:border-ouro/60"
+                      : "border-ouro/25 text-creme-suave hover:border-ouro/60"
                   }`}
                 >
                   {a}
@@ -126,18 +126,18 @@ export function CompraProduto({ produto }: { produto: Produto }) {
             <button
               type="button"
               onClick={() => setQuantidade((q) => Math.max(1, q - 1))}
-              className="px-4 py-2 text-lg text-tinta-suave hover:text-ouro-claro"
+              className="px-4 py-2 text-lg text-creme-suave hover:text-ouro-claro"
               aria-label="Diminuir quantidade"
             >
               −
             </button>
-            <span className="w-10 text-center text-tinta" aria-live="polite">
+            <span className="w-10 text-center text-creme" aria-live="polite">
               {quantidade}
             </span>
             <button
               type="button"
               onClick={() => setQuantidade((q) => Math.min(99, q + 1))}
-              className="px-4 py-2 text-lg text-tinta-suave hover:text-ouro-claro"
+              className="px-4 py-2 text-lg text-creme-suave hover:text-ouro-claro"
               aria-label="Aumentar quantidade"
             >
               +
@@ -147,7 +147,7 @@ export function CompraProduto({ produto }: { produto: Produto }) {
           <button
             type="button"
             onClick={aoAdicionar}
-            className="flex-1 rounded-full bg-ouro px-8 py-3 text-sm font-medium tracking-wide text-white transition-colors hover:bg-ouro-claro sm:flex-none"
+            className="flex-1 rounded-full bg-ouro px-8 py-3 text-sm font-medium tracking-wide text-preto transition-colors hover:bg-ouro-claro sm:flex-none"
           >
             Adicionar ao carrinho
           </button>
@@ -166,15 +166,15 @@ export function CompraProduto({ produto }: { produto: Produto }) {
 
         <dl className="mt-8 space-y-2 border-t border-ouro/15 pt-6 text-sm">
           <div className="flex gap-2">
-            <dt className="text-tinta-fraca">Medidas aproximadas:</dt>
-            <dd className="text-tinta-suave">
+            <dt className="text-creme-fraco">Medidas aproximadas:</dt>
+            <dd className="text-creme-suave">
               {produto.medidas.altura} × {produto.medidas.largura} ×{" "}
               {produto.medidas.profundidade} cm
             </dd>
           </div>
           <div className="flex gap-2">
-            <dt className="text-tinta-fraca">Produção:</dt>
-            <dd className="text-tinta-suave">
+            <dt className="text-creme-fraco">Produção:</dt>
+            <dd className="text-creme-suave">
               {produto.prazoProducao} dias úteis (peça feita sob encomenda)
             </dd>
           </div>

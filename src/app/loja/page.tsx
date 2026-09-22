@@ -5,15 +5,15 @@ import { PRODUTOS } from "@/data/produtos";
 export const metadata: Metadata = {
   title: "Loja",
   description:
-    "Todas as peças do ateliê: luminárias, bustos, devocionais e lembrancinhas em impressão 3D.",
+    "Todas as peças do ateliê: luminárias, bustos e devocionais em impressão 3D.",
 };
 
 export default function LojaPage() {
   return (
     <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
       <header className="mb-12 text-center">
-        <h1 className="font-display text-5xl text-tinta">Nossas peças</h1>
-        <p className="mt-3 text-tinta-fraca">
+        <h1 className="font-display text-5xl text-creme">Nossas peças</h1>
+        <p className="mt-3 text-creme-fraco">
           Todas feitas sob encomenda, uma a uma.
         </p>
       </header>

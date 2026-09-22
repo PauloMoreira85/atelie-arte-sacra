@@ -15,10 +15,10 @@ export function CardProduto({
   return (
     <Link
       href={`/produto/${produto.slug}`}
-      className="group flex flex-col overflow-hidden rounded-xl border border-ouro/15 bg-pergaminho transition-colors hover:border-ouro/45"
+      className="group flex flex-col overflow-hidden rounded-xl border border-ouro/15 bg-carvao transition-colors hover:border-ouro/45"
     >
       <div
-        className="relative aspect-square overflow-hidden bg-pergaminho"
+        className="relative aspect-square overflow-hidden bg-carvao"
         style={
           produto.fundoCard ? { backgroundColor: produto.fundoCard } : undefined
         }
@@ -35,8 +35,8 @@ export function CardProduto({
       </div>
 
       <div className="flex flex-1 flex-col p-5">
-        <h3 className="font-display text-xl text-tinta">{produto.nome}</h3>
-        <p className="mt-1 flex-1 text-sm leading-relaxed text-tinta-fraca">
+        <h3 className="font-display text-xl text-creme">{produto.nome}</h3>
+        <p className="mt-1 flex-1 text-sm leading-relaxed text-creme-fraco">
           {produto.resumo}
         </p>
 
@@ -44,7 +44,7 @@ export function CardProduto({
           <span className="text-lg text-ouro-claro">
             {formatarPreco(produto.preco)}
           </span>
-          <span className="text-xs text-tinta-fraca group-hover:text-ouro-claro">
+          <span className="text-xs text-creme-fraco group-hover:text-ouro-claro">
             Ver peça →
           </span>
         </div>

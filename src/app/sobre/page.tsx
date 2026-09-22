@@ -19,11 +19,11 @@ export default function SobrePage() {
         className="mx-auto mb-10 w-52 rounded-xl"
       />
 
-      <h1 className="text-center font-display text-5xl text-tinta">
+      <h1 className="text-center font-display text-5xl text-creme">
         Sobre o ateliê
       </h1>
 
-      <div className="mt-10 space-y-5 text-[17px] leading-relaxed text-tinta-suave">
+      <div className="mt-10 space-y-5 text-[17px] leading-relaxed text-creme-suave">
         <p>
           O Ateliê Arte Sacra nasceu do encontro entre a tecnologia da impressão
           3D e uma tradição muito mais antiga: a de representar em imagem aquilo
@@ -47,10 +47,10 @@ export default function SobrePage() {
       <div className="my-12 filete-ouro" />
 
       <section>
-        <h2 className="font-display text-3xl text-tinta">
+        <h2 className="font-display text-3xl text-creme">
           Encomendas em quantidade
         </h2>
-        <p className="mt-4 leading-relaxed text-tinta-suave">
+        <p className="mt-4 leading-relaxed text-creme-suave">
           Fazemos lembrancinhas para batizado, primeira comunhão, crisma e
           casamento, com preço especial a partir de 20 unidades. Se a sua
           paróquia ou família tem uma devoção específica, fale com a gente: na
@@ -60,7 +60,7 @@ export default function SobrePage() {
           href={linkWhatsApp("Olá! Gostaria de falar sobre uma encomenda.")}
           target="_blank"
           rel="noopener noreferrer"
-          className="mt-8 inline-block rounded-full bg-ouro px-8 py-3 text-sm font-medium text-white transition-colors hover:bg-ouro-claro"
+          className="mt-8 inline-block rounded-full bg-ouro px-8 py-3 text-sm font-medium text-preto transition-colors hover:bg-ouro-claro"
         >
           Falar no WhatsApp
         </a>
@@ -69,8 +69,8 @@ export default function SobrePage() {
       <div className="my-12 filete-ouro" />
 
       <section>
-        <h2 className="font-display text-3xl text-tinta">Cuidados com a peça</h2>
-        <ul className="mt-4 space-y-2 leading-relaxed text-tinta-suave">
+        <h2 className="font-display text-3xl text-creme">Cuidados com a peça</h2>
+        <ul className="mt-4 space-y-2 leading-relaxed text-creme-suave">
           <li>
             Limpe com pano seco ou levemente úmido. Não use álcool, acetona ou
             produtos abrasivos no acabamento metálico.

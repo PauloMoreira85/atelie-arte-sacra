@@ -16,12 +16,12 @@ export default function Home() {
             <p className="mb-4 text-xs uppercase tracking-[0.25em] text-ouro">
               Impressão 3D · Acabamento à mão
             </p>
-            <h1 className="font-display text-5xl leading-[1.08] text-tinta sm:text-6xl">
+            <h1 className="font-display text-5xl leading-[1.08] text-creme sm:text-6xl">
               Arte sacra para
               <br />
               <span className="text-ouro-claro">o seu cantinho de fé</span>
             </h1>
-            <p className="mt-6 max-w-md text-lg leading-relaxed text-tinta-suave">
+            <p className="mt-6 max-w-md text-lg leading-relaxed text-creme-suave">
               Luminárias, bustos e devocionais modelados em 3D e acabados peça
               por peça. Cada encomenda é produzida só depois do seu pedido.
             </p>
@@ -29,7 +29,7 @@ export default function Home() {
             <div className="mt-9 flex flex-wrap gap-4">
               <Link
                 href="/loja"
-                className="rounded-full bg-ouro px-8 py-3 text-sm font-medium tracking-wide text-white transition-colors hover:bg-ouro-claro"
+                className="rounded-full bg-ouro px-8 py-3 text-sm font-medium tracking-wide text-preto transition-colors hover:bg-ouro-claro"
               >
                 Ver todas as peças
               </Link>
@@ -39,7 +39,7 @@ export default function Home() {
                 )}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="rounded-full border border-ouro/40 px-8 py-3 text-sm tracking-wide text-tinta transition-colors hover:border-ouro hover:text-ouro-claro"
+                className="rounded-full border border-ouro/40 px-8 py-3 text-sm tracking-wide text-creme transition-colors hover:border-ouro hover:text-ouro-claro"
               >
                 Encomenda personalizada
               </a>
@@ -63,8 +63,8 @@ export default function Home() {
       {/* Destaques */}
       <section className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
         <div className="mb-10 text-center">
-          <h2 className="font-display text-4xl text-tinta">As mais pedidas</h2>
-          <p className="mt-3 text-tinta-fraca">
+          <h2 className="font-display text-4xl text-creme">As mais pedidas</h2>
+          <p className="mt-3 text-creme-fraco">
             As peças que mais saem do ateliê.
           </p>
         </div>
@@ -80,7 +80,7 @@ export default function Home() {
 
       {/* Como funciona */}
       <section className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
-        <h2 className="mb-12 text-center font-display text-4xl text-tinta">
+        <h2 className="mb-12 text-center font-display text-4xl text-creme">
           Como funciona
         </h2>
 
@@ -106,8 +106,8 @@ export default function Home() {
               <span className="font-display text-4xl text-ouro/50">
                 {passo.n}
               </span>
-              <h3 className="mt-3 text-xl text-tinta">{passo.t}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-tinta-fraca">
+              <h3 className="mt-3 text-xl text-creme">{passo.t}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-creme-fraco">
                 {passo.d}
               </p>
             </li>
@@ -116,9 +116,9 @@ export default function Home() {
       </section>
 
       {/* Categorias */}
-      <section className="border-y border-ouro/15 bg-pergaminho">
+      <section className="border-y border-ouro/15 bg-carvao">
         <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
-          <h2 className="mb-10 text-center font-display text-4xl text-tinta">
+          <h2 className="mb-10 text-center font-display text-4xl text-creme">
             Navegue por categoria
           </h2>
 
@@ -136,10 +136,10 @@ export default function Home() {
                   <h3 className="font-display text-2xl text-ouro-claro">
                     {c.nome}
                   </h3>
-                  <p className="mt-2 text-sm leading-relaxed text-tinta-fraca">
+                  <p className="mt-2 text-sm leading-relaxed text-creme-fraco">
                     {c.descricao}
                   </p>
-                  <p className="mt-4 text-xs uppercase tracking-widest text-tinta-fraca">
+                  <p className="mt-4 text-xs uppercase tracking-widest text-creme-fraco">
                     {quantas} {quantas === 1 ? "peça" : "peças"}
                   </p>
                 </Link>
@@ -151,10 +151,10 @@ export default function Home() {
 
       {/* Encomendas */}
       <section className="mx-auto max-w-2xl px-4 py-20 text-center sm:px-6">
-        <h2 className="font-display text-4xl text-tinta">
+        <h2 className="font-display text-4xl text-creme">
           Quer uma peça personalizada?
         </h2>
-        <p className="mt-4 leading-relaxed text-tinta-suave">
+        <p className="mt-4 leading-relaxed text-creme-suave">
           Fazemos lembrancinhas em quantidade para batizado, casamento, primeira
           comunhão e crisma — e também o santo de devoção da sua família.
         </p>
@@ -164,11 +164,11 @@ export default function Home() {
           )}
           target="_blank"
           rel="noopener noreferrer"
-          className="mt-8 inline-block rounded-full bg-ouro px-8 py-3 text-sm font-medium tracking-wide text-white transition-colors hover:bg-ouro-claro"
+          className="mt-8 inline-block rounded-full bg-ouro px-8 py-3 text-sm font-medium tracking-wide text-preto transition-colors hover:bg-ouro-claro"
         >
           Pedir orçamento no WhatsApp
         </a>
-        <p className="mt-4 text-sm text-tinta-fraca">{LOJA.cidade}</p>
+        <p className="mt-4 text-sm text-creme-fraco">{LOJA.cidade}</p>
       </section>
     </>
   );

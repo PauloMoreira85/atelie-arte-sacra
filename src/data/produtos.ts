@@ -5,7 +5,8 @@
  *
  * ⚠️  REVISAR: os preços e as medidas abaixo são ESTIMATIVAS que eu inventei
  *     para o site funcionar. Troque pelos valores reais antes de vender.
- *     A única peça com medidas confirmadas é o Porta Terço (veio na foto).
+ *     As peças com medidas confirmadas (vieram nas artes) estão marcadas
+ *     com ✅ — as demais seguem como estimativa.
  *
  * Preços em CENTAVOS (R$ 149,90 => 14990). Isso evita erro de arredondamento
  * de ponto flutuante no carrinho e é o formato que a Asaas espera receber.
@@ -29,15 +30,15 @@ export type Produto = {
   /** Aparece com selo de destaque na home. */
   destaque?: boolean;
   /**
-   * Cor de fundo do card. Use quando a foto do produto NÃO for em fundo preto
-   * (ex: uma arte pronta em fundo claro), senão o preto vira uma moldura dura.
+   * Cor de fundo do card. Só é necessário se a arte de uma peça NÃO for em
+   * fundo preto como as demais — aí o preto viraria uma moldura dura.
    */
   fundoCard?: string;
   /** Dias úteis para produzir. Peça é feita sob encomenda. */
   prazoProducao: number;
 };
 
-export type Categoria = "luminarias" | "bustos" | "devocionais" | "lembrancinhas";
+export type Categoria = "luminarias" | "bustos" | "devocionais";
 
 export const CATEGORIAS: Record<Categoria, { nome: string; descricao: string }> = {
   luminarias: {
@@ -51,10 +52,6 @@ export const CATEGORIAS: Record<Categoria, { nome: string; descricao: string }> 
   devocionais: {
     nome: "Devocionais",
     descricao: "Peças para o altar, o oratório e o cantinho de oração.",
-  },
-  lembrancinhas: {
-    nome: "Lembrancinhas",
-    descricao: "Para batizados, casamentos, primeira comunhão e crisma.",
   },
 };
 
@@ -71,12 +68,7 @@ export const PRODUTOS: Produto[] = [
     ],
     medidas: { altura: 22, largura: 17, profundidade: 9 }, // REVISAR
     acabamentos: ["Branco perolado"],
-    imagens: [
-      "/produtos/anjo-luminaria-acesa.webp",
-      "/produtos/anjo-luminaria-rosa.webp",
-      "/produtos/anjo-luminaria-azul.webp",
-      "/produtos/anjo-luminaria-apagada.webp",
-    ],
+    imagens: ["/produtos/anjo-luminaria.webp"],
     destaque: true,
     prazoProducao: 5,
   },
@@ -94,7 +86,6 @@ export const PRODUTOS: Produto[] = [
     acabamentos: ["Branco perolado"],
     imagens: ["/produtos/porta-terco-aparecida.webp"],
     destaque: true,
-    fundoCard: "#f3ece2",
     prazoProducao: 4,
   },
   {
@@ -109,11 +100,7 @@ export const PRODUTOS: Produto[] = [
     ],
     medidas: { altura: 20, largura: 14, profundidade: 11 }, // REVISAR
     acabamentos: ["Dourado", "Cobre"],
-    imagens: [
-      "/produtos/busto-cristo-dourado.webp",
-      "/produtos/busto-cristo-dourado-frontal.webp",
-      "/produtos/bustos-duo.webp",
-    ],
+    imagens: ["/produtos/busto-cristo-dourado.webp"],
     destaque: true,
     prazoProducao: 7,
   },
@@ -151,19 +138,38 @@ export const PRODUTOS: Produto[] = [
     prazoProducao: 5,
   },
   {
-    slug: "chaveiro-aparecida",
-    nome: "Chaveiro Nossa Senhora Aparecida",
-    categoria: "lembrancinhas",
-    preco: 1490, // REVISAR
-    resumo: "Silhueta vazada em renda. Ideal para lembrancinha.",
+    slug: "nossa-senhora-gracas",
+    nome: "Nossa Senhora das Graças",
+    categoria: "devocionais",
+    preco: 16990, // REVISAR
+    resumo: "Imagem de mãos abertas, com auréola de estrelas dourada.",
     descricao: [
-      "A silhueta de Nossa Senhora Aparecida vazada como uma renda, com a coroa, o manto em arabescos e o terço no centro. Leve, fina e resistente, com argola metálica.",
-      "É a nossa peça de lembrancinha: sai em quantidade para batizado, primeira comunhão, crisma e casamento. Para encomendas acima de 20 unidades, fale com a gente que fazemos preço de lote.",
+      "Nossa Senhora das Graças de mãos abertas, no gesto de quem acolhe. O manto cai em pregas finas, trabalhadas uma a uma, e o acabamento perolado dá à peça o brilho suave da madrepérola.",
+      "A auréola de doze estrelas é impressa à parte, em dourado, e encaixa na imagem — o contraste entre o perolado e o ouro é o que dá presença à peça mesmo de longe.",
     ],
-    medidas: { altura: 6, largura: 4, profundidade: 0.4 }, // REVISAR
+    medidas: { altura: 19.5, largura: 8, profundidade: 6.5 }, // ✅ confirmado pela arte
+    acabamentos: ["Perolado com auréola dourada"],
+    imagens: [
+      "/produtos/nossa-senhora-gracas.webp",
+      "/produtos/nossa-senhora-gracas-medidas.webp",
+    ],
+    destaque: true,
+    prazoProducao: 6,
+  },
+  {
+    slug: "aparecida-vazada",
+    nome: "Nossa Senhora Aparecida Vazada",
+    categoria: "devocionais",
+    preco: 11990, // REVISAR
+    resumo: "Silhueta vazada em renda, com coroa e terço em relevo.",
+    descricao: [
+      "A silhueta de Nossa Senhora Aparecida vazada como uma renda: a coroa, os arabescos do manto e o terço no centro são todos impressos numa peça só, sem emendas nem colagem.",
+      "Fica em pé sobre a própria base. Contra uma parede clara ou uma janela, o vazado desenha a sombra da imagem — por isso costuma ficar bonita perto de uma fonte de luz.",
+    ],
+    medidas: { altura: 18, largura: 14, profundidade: 4 }, // REVISAR
     acabamentos: ["Branco perolado"],
-    imagens: ["/produtos/chaveiro-aparecida.webp"],
-    prazoProducao: 3,
+    imagens: ["/produtos/aparecida-vazada.webp"],
+    prazoProducao: 4,
   },
 ];
 

@@ -13,7 +13,7 @@ export default function CarrinhoPage() {
     <Suspense
       fallback={
         <div className="mx-auto max-w-6xl px-4 py-24 sm:px-6">
-          <p className="text-tinta-fraca">Carregando…</p>
+          <p className="text-creme-fraco">Carregando…</p>
         </div>
       }
     >

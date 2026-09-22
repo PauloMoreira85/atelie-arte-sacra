@@ -30,17 +30,17 @@ export default async function CategoriaPage({ params }: Props) {
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
-      <nav className="mb-8 text-sm text-tinta-fraca">
+      <nav className="mb-8 text-sm text-creme-fraco">
         <Link href="/loja" className="hover:text-ouro-claro">
           Loja
         </Link>
         <span className="mx-2">/</span>
-        <span className="text-tinta-suave">{info.nome}</span>
+        <span className="text-creme-suave">{info.nome}</span>
       </nav>
 
       <header className="mb-12">
-        <h1 className="font-display text-5xl text-tinta">{info.nome}</h1>
-        <p className="mt-3 text-tinta-fraca">{info.descricao}</p>
+        <h1 className="font-display text-5xl text-creme">{info.nome}</h1>
+        <p className="mt-3 text-creme-fraco">{info.descricao}</p>
       </header>
 
       {itens.length > 0 ? (
@@ -50,7 +50,7 @@ export default async function CategoriaPage({ params }: Props) {
           ))}
         </div>
       ) : (
-        <p className="text-tinta-fraca">
+        <p className="text-creme-fraco">
           Ainda não há peças nesta categoria.{" "}
           <Link href="/loja" className="text-ouro-claro underline underline-offset-4">
             Ver todas

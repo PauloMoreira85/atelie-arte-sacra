@@ -7,7 +7,7 @@ export function Rodape() {
   const ano = new Date().getFullYear();
 
   return (
-    <footer className="mt-24 border-t border-ouro/15 bg-pergaminho">
+    <footer className="mt-24 border-t border-ouro/15 bg-carvao">
       <div className="mx-auto grid max-w-6xl gap-10 px-4 py-14 sm:px-6 md:grid-cols-3">
         <div>
           <Image
@@ -17,7 +17,7 @@ export function Rodape() {
             height={220}
             className="mb-4 w-44 rounded-lg"
           />
-          <p className="max-w-xs text-sm leading-relaxed text-tinta-fraca">
+          <p className="max-w-xs text-sm leading-relaxed text-creme-fraco">
             {LOJA.descricao}
           </p>
         </div>
@@ -31,7 +31,7 @@ export function Rodape() {
               <li key={slug}>
                 <Link
                   href={`/loja/${slug}`}
-                  className="text-tinta-suave transition-colors hover:text-ouro-claro"
+                  className="text-creme-suave transition-colors hover:text-ouro-claro"
                 >
                   {c.nome}
                 </Link>
@@ -40,7 +40,7 @@ export function Rodape() {
             <li>
               <Link
                 href="/sobre"
-                className="text-tinta-suave transition-colors hover:text-ouro-claro"
+                className="text-creme-suave transition-colors hover:text-ouro-claro"
               >
                 Sobre o ateliê
               </Link>
@@ -52,7 +52,7 @@ export function Rodape() {
           <h3 className="mb-4 text-sm uppercase tracking-widest text-ouro-claro">
             Contato
           </h3>
-          <ul className="space-y-2 text-sm text-tinta-suave">
+          <ul className="space-y-2 text-sm text-creme-suave">
             <li>
               <a
                 href={linkWhatsApp("Olá! Vim pelo site e gostaria de saber mais.")}
@@ -81,14 +81,14 @@ export function Rodape() {
                 {LOJA.email}
               </a>
             </li>
-            <li className="pt-2 text-tinta-fraca">{LOJA.cidade}</li>
+            <li className="pt-2 text-creme-fraco">{LOJA.cidade}</li>
           </ul>
         </div>
       </div>
 
       <div className="filete-ouro" />
 
-      <div className="mx-auto max-w-6xl px-4 py-6 text-center text-xs text-tinta-fraca sm:px-6">
+      <div className="mx-auto max-w-6xl px-4 py-6 text-center text-xs text-creme-fraco sm:px-6">
         <p>
           © {ano} {LOJA.nome}. Peças feitas sob encomenda, uma a uma.
         </p>

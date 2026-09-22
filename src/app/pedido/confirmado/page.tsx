@@ -12,7 +12,7 @@ export default function ConfirmadoPage() {
     <Suspense
       fallback={
         <div className="mx-auto max-w-2xl px-4 py-24 text-center sm:px-6">
-          <p className="text-tinta-fraca">Carregando…</p>
+          <p className="text-creme-fraco">Carregando…</p>
         </div>
       }
     >

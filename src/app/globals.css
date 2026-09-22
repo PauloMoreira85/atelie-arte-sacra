@@ -1,41 +1,42 @@
 @import "tailwindcss";
 
 /*
-  Tema claro. A paleta sai da própria logo: dourado envelhecido, marrom do
-  lettering e o creme do papel. Luz, não escuridão — é um site de arte sacra.
+  Tema escuro. As artes dos produtos são feitas em fundo preto com a logo
+  dourada embutida, então o site acompanha: a peça e a marca flutuam sem
+  moldura visível, como numa vitrine de joalheria.
 */
 @theme {
-  --color-branco: #ffffff;
-  --color-pergaminho: #fdfbf7;
-  --color-creme: #f7f1e6;
-  --color-creme-escuro: #efe5d4;
+  --color-preto: #000000;
+  --color-carvao: #0a0a0b;
+  --color-grafite: #141416;
+  --color-grafite-claro: #1c1c1f;
 
-  --color-ouro: #b0862f;
-  --color-ouro-claro: #c9a227;
+  --color-ouro: #c9a227;
+  --color-ouro-claro: #e0c368;
   --color-ouro-escuro: #8c6529;
 
-  --color-tinta: #3a2a1a;
-  --color-tinta-suave: #6b5540;
-  --color-tinta-fraca: #948069;
+  --color-creme: #f4efe4;
+  --color-creme-suave: #cdc4b4;
+  --color-creme-fraco: #8e8577;
 
   --font-display: var(--font-cormorant), Georgia, "Times New Roman", serif;
   --font-corpo: var(--font-inter), system-ui, -apple-system, sans-serif;
 }
 
 html {
-  color-scheme: light;
+  color-scheme: dark;
 }
 
 body {
-  background: var(--color-branco);
-  color: var(--color-tinta);
+  background: var(--color-preto);
+  color: var(--color-creme);
   font-family: var(--font-corpo);
   -webkit-font-smoothing: antialiased;
 }
 
 h1, h2, h3, h4 {
   font-family: var(--font-display);
-  font-weight: 400;
+  font-weight: 300;
   letter-spacing: -0.01em;
 }
 
@@ -49,15 +50,15 @@ h1, h2, h3, h4 {
     var(--color-ouro) 80%,
     transparent
   );
-  opacity: 0.35;
+  opacity: 0.4;
 }
 
-/* Brilho quente e discreto atrás da peça em destaque. */
+/* Brilho quente atrás da peça em destaque. */
 .halo-ouro {
   background: radial-gradient(
     ellipse at center,
-    color-mix(in srgb, var(--color-ouro) 10%, transparent) 0%,
-    transparent 70%
+    color-mix(in srgb, var(--color-ouro) 13%, transparent) 0%,
+    transparent 68%
   );
 }
 
@@ -73,8 +74,8 @@ h1, h2, h3, h4 {
 }
 
 ::selection {
-  background: color-mix(in srgb, var(--color-ouro) 25%, transparent);
-  color: var(--color-tinta);
+  background: color-mix(in srgb, var(--color-ouro) 32%, transparent);
+  color: var(--color-creme);
 }
 
 :focus-visible {

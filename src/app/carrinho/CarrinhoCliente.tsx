@@ -106,7 +106,7 @@ export function CarrinhoCliente() {
   if (!carregado) {
     return (
       <div className="mx-auto max-w-6xl px-4 py-24 sm:px-6">
-        <p className="text-tinta-fraca">Carregando…</p>
+        <p className="text-creme-fraco">Carregando…</p>
       </div>
     );
   }
@@ -114,18 +114,18 @@ export function CarrinhoCliente() {
   if (linhas.length === 0) {
     return (
       <div className="mx-auto max-w-2xl px-4 py-24 text-center sm:px-6">
-        <h1 className="font-display text-4xl text-tinta">
+        <h1 className="font-display text-4xl text-creme">
           Seu carrinho está vazio
         </h1>
         {statusRetorno === "cancelado" && (
-          <p className="mt-4 text-tinta-suave">
+          <p className="mt-4 text-creme-suave">
             O pagamento foi cancelado. Você pode montar o pedido de novo quando
             quiser.
           </p>
         )}
         <Link
           href="/loja"
-          className="mt-8 inline-block rounded-full bg-ouro px-8 py-3 text-sm font-medium text-white transition-colors hover:bg-ouro-claro"
+          className="mt-8 inline-block rounded-full bg-ouro px-8 py-3 text-sm font-medium text-preto transition-colors hover:bg-ouro-claro"
         >
           Ver as peças
         </Link>
@@ -146,16 +146,16 @@ export function CarrinhoCliente() {
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
-      <h1 className="mb-10 font-display text-4xl text-tinta">Seu carrinho</h1>
+      <h1 className="mb-10 font-display text-4xl text-creme">Seu carrinho</h1>
 
       {statusRetorno === "expirado" && (
-        <p className="mb-8 rounded-lg border border-ouro/30 bg-ouro/5 p-4 text-sm text-tinta-suave">
+        <p className="mb-8 rounded-lg border border-ouro/30 bg-ouro/5 p-4 text-sm text-creme-suave">
           O prazo do pagamento anterior expirou. Seus itens continuam aqui —
           é só finalizar de novo.
         </p>
       )}
       {statusRetorno === "cancelado" && (
-        <p className="mb-8 rounded-lg border border-ouro/30 bg-ouro/5 p-4 text-sm text-tinta-suave">
+        <p className="mb-8 rounded-lg border border-ouro/30 bg-ouro/5 p-4 text-sm text-creme-suave">
           Pagamento cancelado. Seus itens continuam no carrinho.
         </p>
       )}
@@ -166,11 +166,11 @@ export function CarrinhoCliente() {
           {linhas.map((linha) => (
             <li
               key={`${linha.slug}-${linha.acabamento}`}
-              className="flex gap-4 rounded-xl border border-ouro/15 bg-pergaminho p-4"
+              className="flex gap-4 rounded-xl border border-ouro/15 bg-carvao p-4"
             >
               <Link
                 href={`/produto/${linha.slug}`}
-                className="relative h-24 w-24 shrink-0 overflow-hidden rounded-lg bg-creme"
+                className="relative h-24 w-24 shrink-0 overflow-hidden rounded-lg bg-preto"
               >
                 <Image
                   src={linha.produto.imagens[0].replace(
@@ -187,11 +187,11 @@ export function CarrinhoCliente() {
               <div className="flex flex-1 flex-col">
                 <Link
                   href={`/produto/${linha.slug}`}
-                  className="font-display text-xl text-tinta hover:text-ouro-claro"
+                  className="font-display text-xl text-creme hover:text-ouro-claro"
                 >
                   {linha.produto.nome}
                 </Link>
-                <p className="text-sm text-tinta-fraca">{linha.acabamento}</p>
+                <p className="text-sm text-creme-fraco">{linha.acabamento}</p>
 
                 <div className="mt-auto flex flex-wrap items-center gap-4 pt-3">
                   <div className="flex items-center rounded-full border border-ouro/25">
@@ -204,12 +204,12 @@ export function CarrinhoCliente() {
                           linha.quantidade - 1,
                         )
                       }
-                      className="px-3 py-1 text-tinta-suave hover:text-ouro-claro"
+                      className="px-3 py-1 text-creme-suave hover:text-ouro-claro"
                       aria-label={`Diminuir ${linha.produto.nome}`}
                     >
                       −
                     </button>
-                    <span className="w-8 text-center text-sm text-tinta">
+                    <span className="w-8 text-center text-sm text-creme">
                       {linha.quantidade}
                     </span>
                     <button
@@ -221,7 +221,7 @@ export function CarrinhoCliente() {
                           linha.quantidade + 1,
                         )
                       }
-                      className="px-3 py-1 text-tinta-suave hover:text-ouro-claro"
+                      className="px-3 py-1 text-creme-suave hover:text-ouro-claro"
                       aria-label={`Aumentar ${linha.produto.nome}`}
                     >
                       +
@@ -231,7 +231,7 @@ export function CarrinhoCliente() {
                   <button
                     type="button"
                     onClick={() => remover(linha.slug, linha.acabamento)}
-                    className="text-xs text-tinta-fraca underline underline-offset-4 hover:text-ouro-claro"
+                    className="text-xs text-creme-fraco underline underline-offset-4 hover:text-ouro-claro"
                   >
                     Remover
                   </button>
@@ -246,24 +246,24 @@ export function CarrinhoCliente() {
         </ul>
 
         {/* Resumo + dados */}
-        <aside className="h-fit rounded-xl border border-ouro/20 bg-pergaminho p-6">
-          <h2 className="font-display text-2xl text-tinta">Resumo</h2>
+        <aside className="h-fit rounded-xl border border-ouro/20 bg-carvao p-6">
+          <h2 className="font-display text-2xl text-creme">Resumo</h2>
 
           <dl className="mt-5 space-y-2 text-sm">
             <div className="flex justify-between">
-              <dt className="text-tinta-fraca">Subtotal</dt>
-              <dd className="text-tinta-suave">{formatarPreco(subtotal)}</dd>
+              <dt className="text-creme-fraco">Subtotal</dt>
+              <dd className="text-creme-suave">{formatarPreco(subtotal)}</dd>
             </div>
             <div className="flex justify-between">
-              <dt className="text-tinta-fraca">Frete</dt>
-              <dd className="text-tinta-suave">
+              <dt className="text-creme-fraco">Frete</dt>
+              <dd className="text-creme-suave">
                 {frete === 0 ? "Grátis" : formatarPreco(frete)}
               </dd>
             </div>
           </dl>
 
           {frete > 0 && (
-            <p className="mt-3 text-xs text-tinta-fraca">
+            <p className="mt-3 text-xs text-creme-fraco">
               Faltam {formatarPreco(LOJA.freteGratisAcima - subtotal)} para o
               frete grátis.
             </p>
@@ -272,7 +272,7 @@ export function CarrinhoCliente() {
           <div className="my-5 filete-ouro" />
 
           <div className="flex items-baseline justify-between">
-            <span className="text-tinta">Total</span>
+            <span className="text-creme">Total</span>
             <span className="text-2xl text-ouro-claro">
               {formatarPreco(total)}
             </span>
@@ -311,14 +311,14 @@ export function CarrinhoCliente() {
               placeholder="000.000.000-00"
             />
 
-            <p className="pt-1 text-xs leading-relaxed text-tinta-fraca">
+            <p className="pt-1 text-xs leading-relaxed text-creme-fraco">
               O endereço de entrega é pedido na etapa seguinte, na página segura
               de pagamento.
             </p>
 
             {erro && (
               <p
-                className="rounded-lg border border-red-300 bg-red-50 p-3 text-sm text-red-700"
+                className="rounded-lg border border-red-500/40 bg-red-500/10 p-3 text-sm text-red-200"
                 role="alert"
               >
                 {erro}
@@ -328,13 +328,13 @@ export function CarrinhoCliente() {
             <button
               type="submit"
               disabled={enviando}
-              className="w-full rounded-full bg-ouro px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-ouro-claro disabled:cursor-not-allowed disabled:opacity-60"
+              className="w-full rounded-full bg-ouro px-6 py-3 text-sm font-medium text-preto transition-colors hover:bg-ouro-claro disabled:cursor-not-allowed disabled:opacity-60"
             >
               {enviando ? "Abrindo pagamento…" : "Ir para o pagamento"}
             </button>
           </form>
 
-          <p className="mt-4 text-center text-xs text-tinta-fraca">
+          <p className="mt-4 text-center text-xs text-creme-fraco">
             Pix, cartão em até 6x ou boleto.
           </p>
 
@@ -344,7 +344,7 @@ export function CarrinhoCliente() {
             href={linkWhatsApp(resumoWhatsApp)}
             target="_blank"
             rel="noopener noreferrer"
-            className="block rounded-full border border-ouro/35 px-6 py-3 text-center text-sm text-tinta transition-colors hover:border-ouro hover:text-ouro-claro"
+            className="block rounded-full border border-ouro/35 px-6 py-3 text-center text-sm text-creme transition-colors hover:border-ouro hover:text-ouro-claro"
           >
             Prefiro fechar pelo WhatsApp
           </a>
@@ -371,7 +371,7 @@ function Campo({
 }) {
   return (
     <label className="block">
-      <span className="mb-1 block text-xs text-tinta-fraca">{rotulo}</span>
+      <span className="mb-1 block text-xs text-creme-fraco">{rotulo}</span>
       <input
         type={tipo}
         value={valor}
@@ -379,7 +379,7 @@ function Campo({
         required
         autoComplete={autoComplete}
         placeholder={placeholder}
-        className="w-full rounded-lg border border-ouro/25 bg-creme px-3 py-2 text-sm text-tinta placeholder:text-tinta-fraca/60 focus:border-ouro focus:outline-none"
+        className="w-full rounded-lg border border-ouro/25 bg-preto px-3 py-2 text-sm text-creme placeholder:text-creme-fraco/60 focus:border-ouro focus:outline-none"
       />
     </label>
   );

@@ -23,7 +23,7 @@ export function Cabecalho() {
   const rota = usePathname();
 
   return (
-    <header className="sticky top-0 z-50 border-b border-ouro/15 bg-white/85 backdrop-blur-md">
+    <header className="sticky top-0 z-50 border-b border-ouro/15 bg-preto/85 backdrop-blur-md">
       <div className="mx-auto flex max-w-6xl items-center gap-4 px-4 py-3 sm:px-6">
         <Link
           href="/"
@@ -38,7 +38,7 @@ export function Cabecalho() {
             className="h-10 w-10 rounded-full object-cover"
             priority
           />
-          <span className="font-display text-lg leading-none tracking-wide text-tinta">
+          <span className="font-display text-lg leading-none tracking-wide text-creme">
             Ateliê <span className="text-ouro-claro">Arte Sacra</span>
           </span>
         </Link>
@@ -51,7 +51,7 @@ export function Cabecalho() {
                 key={l.href}
                 href={l.href}
                 className={`text-sm transition-colors hover:text-ouro-claro ${
-                  ativo ? "text-ouro-claro" : "text-tinta-suave"
+                  ativo ? "text-ouro-claro" : "text-creme-suave"
                 }`}
               >
                 {l.rotulo}
@@ -62,7 +62,7 @@ export function Cabecalho() {
 
         <Link
           href="/carrinho"
-          className="relative ml-auto flex items-center gap-2 rounded-full border border-ouro/35 px-4 py-2 text-sm text-tinta transition-colors hover:border-ouro hover:text-ouro-claro lg:ml-0"
+          className="relative ml-auto flex items-center gap-2 rounded-full border border-ouro/35 px-4 py-2 text-sm text-creme transition-colors hover:border-ouro hover:text-ouro-claro lg:ml-0"
         >
           <svg
             width="18"
@@ -79,7 +79,7 @@ export function Cabecalho() {
           </svg>
           <span className="hidden sm:inline">Carrinho</span>
           {carregado && quantidadeTotal > 0 && (
-            <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-ouro px-1 text-xs font-medium text-white">
+            <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-ouro px-1 text-xs font-medium text-preto">
               {quantidadeTotal}
             </span>
           )}
@@ -88,7 +88,7 @@ export function Cabecalho() {
         <button
           type="button"
           onClick={() => setAberto((a) => !a)}
-          className="text-tinta lg:hidden"
+          className="text-creme lg:hidden"
           aria-label={aberto ? "Fechar menu" : "Abrir menu"}
           aria-expanded={aberto}
         >
@@ -118,7 +118,7 @@ export function Cabecalho() {
                 key={l.href}
                 href={l.href}
                 onClick={() => setAberto(false)}
-                className="border-b border-ouro/10 py-3 text-sm text-tinta-suave last:border-0 hover:text-ouro-claro"
+                className="border-b border-ouro/10 py-3 text-sm text-creme-suave last:border-0 hover:text-ouro-claro"
               >
                 {l.rotulo}
               </Link>

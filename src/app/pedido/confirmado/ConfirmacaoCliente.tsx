@@ -33,16 +33,16 @@ export function ConfirmacaoCliente() {
         </svg>
       </div>
 
-      <h1 className="font-display text-4xl text-tinta">Pedido recebido!</h1>
+      <h1 className="font-display text-4xl text-creme">Pedido recebido!</h1>
 
-      <p className="mt-5 leading-relaxed text-tinta-suave">
+      <p className="mt-5 leading-relaxed text-creme-suave">
         Obrigado pela confiança. Assim que o pagamento for compensado, sua peça
         entra na fila de produção — e a gente te avisa por e-mail e WhatsApp em
         cada etapa.
       </p>
 
       {referencia && (
-        <p className="mt-6 text-sm text-tinta-fraca">
+        <p className="mt-6 text-sm text-creme-fraco">
           Número do pedido:{" "}
           <span className="text-ouro-claro">{referencia}</span>
           <br />
@@ -53,7 +53,7 @@ export function ConfirmacaoCliente() {
       <div className="mt-10 flex flex-wrap justify-center gap-4">
         <Link
           href="/loja"
-          className="rounded-full bg-ouro px-8 py-3 text-sm font-medium text-white transition-colors hover:bg-ouro-claro"
+          className="rounded-full bg-ouro px-8 py-3 text-sm font-medium text-preto transition-colors hover:bg-ouro-claro"
         >
           Continuar comprando
         </Link>
@@ -65,13 +65,13 @@ export function ConfirmacaoCliente() {
           )}
           target="_blank"
           rel="noopener noreferrer"
-          className="rounded-full border border-ouro/40 px-8 py-3 text-sm text-tinta transition-colors hover:border-ouro hover:text-ouro-claro"
+          className="rounded-full border border-ouro/40 px-8 py-3 text-sm text-creme transition-colors hover:border-ouro hover:text-ouro-claro"
         >
           Falar no WhatsApp
         </a>
       </div>
 
-      <p className="mt-8 text-xs text-tinta-fraca">
+      <p className="mt-8 text-xs text-creme-fraco">
         Dúvidas? {LOJA.email}
       </p>
     </div>
