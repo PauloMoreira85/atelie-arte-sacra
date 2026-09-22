@@ -22,8 +22,26 @@ export type Produto = {
   resumo: string;
   /** Texto da página do produto. Pode ter vários parágrafos. */
   descricao: string[];
-  /** Medidas em cm. REVISAR (exceto porta-terco). */
+  /** Medidas da PEÇA em cm — é o que o cliente lê na página. */
   medidas: { altura: number; largura: number; profundidade: number };
+  /**
+   * Dados da CAIXA de envio, usados para cotar frete. São diferentes das
+   * medidas da peça: incluem a embalagem e o plástico-bolha.
+   *
+   * ⚠️ REVISAR: pese e meça uma caixa real de cada peça antes de ligar o
+   * frete calculado — uma estimativa baixa aqui faz você pagar a diferença
+   * do próprio bolso em cada venda.
+   *
+   * Os Correios cobram pelo maior valor entre o peso real e o peso cubado
+   * (altura × largura × comprimento ÷ 6000), então a caixa importa tanto
+   * quanto a balança.
+   */
+  envio: {
+    /** Peso da peça embalada, em gramas. */
+    pesoG: number;
+    /** Medidas da caixa fechada, em cm. */
+    caixa: { altura: number; largura: number; comprimento: number };
+  };
   /** Cores/acabamentos que o cliente escolhe no pedido. */
   acabamentos: string[];
   imagens: string[];
@@ -67,6 +85,10 @@ export const PRODUTOS: Produto[] = [
       "Acompanha base com LED de luz quente e também modo RGB, para escolher a cor conforme o ambiente ou a data. Fica bonito na mesa de cabeceira, no oratório ou como luz de presença no quarto das crianças.",
     ],
     medidas: { altura: 22, largura: 17, profundidade: 9 }, // REVISAR
+    envio: {
+      pesoG: 700, // REVISAR: pesar a caixa real
+      caixa: { altura: 28, largura: 23, comprimento: 15 }, // REVISAR
+    },
     acabamentos: ["Branco perolado"],
     imagens: ["/produtos/anjo-luminaria.webp"],
     destaque: true,
@@ -83,6 +105,10 @@ export const PRODUTOS: Produto[] = [
       "É a peça que mais sai como presente: cabe na mesa de cabeceira, no console da sala e no cantinho de oração, e chega pronta para embrulhar.",
     ],
     medidas: { altura: 17, largura: 11, profundidade: 13 }, // ✅ confirmado pela foto
+    envio: {
+      pesoG: 450, // REVISAR: pesar a caixa real
+      caixa: { altura: 23, largura: 17, comprimento: 19 }, // REVISAR
+    },
     acabamentos: ["Branco perolado"],
     imagens: ["/produtos/porta-terco-aparecida.webp"],
     destaque: true,
@@ -99,6 +125,10 @@ export const PRODUTOS: Produto[] = [
       "O acabamento metálico muda muito com a luz do ambiente: o dourado puxa para o quente e o cobre para o avermelhado. Escolha o acabamento no pedido.",
     ],
     medidas: { altura: 20, largura: 14, profundidade: 11 }, // REVISAR
+    envio: {
+      pesoG: 850, // REVISAR: pesar a caixa real
+      caixa: { altura: 26, largura: 20, comprimento: 17 }, // REVISAR
+    },
     acabamentos: ["Dourado", "Cobre"],
     imagens: ["/produtos/busto-cristo-dourado.webp"],
     destaque: true,
@@ -115,6 +145,10 @@ export const PRODUTOS: Produto[] = [
       "Disponível no acabamento cobre metálico e no cinza mármore, que imita pedra esculpida e combina com ambientes mais sóbrios.",
     ],
     medidas: { altura: 23, largura: 15, profundidade: 12 }, // REVISAR
+    envio: {
+      pesoG: 950, // REVISAR: pesar a caixa real
+      caixa: { altura: 29, largura: 21, comprimento: 18 }, // REVISAR
+    },
     acabamentos: ["Cobre", "Cinza mármore"],
     imagens: [
       "/produtos/busto-cristo-cobre.webp",
@@ -133,6 +167,10 @@ export const PRODUTOS: Produto[] = [
       "Vai na parede com um prego discreto ou apoiado em prateleira. Tradicional acima da porta de entrada, na sala ou no quarto do casal.",
     ],
     medidas: { altura: 24, largura: 24, profundidade: 3 }, // REVISAR
+    envio: {
+      pesoG: 500, // REVISAR: pesar a caixa real
+      caixa: { altura: 30, largura: 30, comprimento: 9 }, // REVISAR
+    },
     acabamentos: ["Branco com resplendor dourado"],
     imagens: ["/produtos/divino-espirito-santo.webp"],
     prazoProducao: 5,
@@ -148,6 +186,10 @@ export const PRODUTOS: Produto[] = [
       "A auréola de doze estrelas é impressa à parte, em dourado, e encaixa na imagem — o contraste entre o perolado e o ouro é o que dá presença à peça mesmo de longe.",
     ],
     medidas: { altura: 19.5, largura: 8, profundidade: 6.5 }, // ✅ confirmado pela arte
+    envio: {
+      pesoG: 550, // REVISAR: pesar a caixa real
+      caixa: { altura: 26, largura: 14, comprimento: 13 }, // REVISAR
+    },
     acabamentos: ["Perolado com auréola dourada"],
     imagens: [
       "/produtos/nossa-senhora-gracas.webp",
@@ -167,6 +209,10 @@ export const PRODUTOS: Produto[] = [
       "Fica em pé sobre a própria base. Contra uma parede clara ou uma janela, o vazado desenha a sombra da imagem — por isso costuma ficar bonita perto de uma fonte de luz.",
     ],
     medidas: { altura: 18, largura: 14, profundidade: 4 }, // REVISAR
+    envio: {
+      pesoG: 400, // REVISAR: pesar a caixa real
+      caixa: { altura: 24, largura: 20, comprimento: 10 }, // REVISAR
+    },
     acabamentos: ["Branco perolado"],
     imagens: ["/produtos/aparecida-vazada.webp"],
     prazoProducao: 4,
