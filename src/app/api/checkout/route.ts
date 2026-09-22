@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { criarCheckout, asaasConfigurado, type ItemCheckout } from "@/lib/asaas";
 import { PRODUTOS } from "@/data/produtos";
+import { cotarFrete, melhorEnvioConfigurado } from "@/lib/melhor-envio";
 import { LOJA } from "@/data/loja";
 
 /**
@@ -19,6 +20,8 @@ type ItemPedido = { slug: string; acabamento: string; quantidade: number };
 type CorpoPedido = {
   itens: ItemPedido[];
   cliente: { nome: string; email: string; telefone: string; cpfCnpj: string };
+  /** CEP e serviço escolhidos na calculadora. O preço é recotado no servidor. */
+  frete?: { cep?: string; servicoId?: number };
 };
 
 const soDigitos = (s: string) => s.replace(/\D/g, "");
@@ -142,13 +145,47 @@ export async function POST(request: Request) {
     });
   }
 
-  const freteCentavos =
-    subtotalCentavos >= LOJA.freteGratisAcima ? 0 : LOJA.freteFixo;
+  // ── Frete ─────────────────────────────────────────────────────────────────
+  // Mesma regra dos preços: o browser diz QUAL serviço quer e para qual CEP,
+  // mas o VALOR é recotado aqui. Aceitar o preço do cliente permitiria pagar
+  // R$ 1,00 de SEDEX.
+  let freteCentavos = 0;
+  let descricaoFrete = "Envio para todo o Brasil";
+
+  if (subtotalCentavos < LOJA.freteGratisAcima) {
+    const cepEntrega = soDigitos(corpo?.frete?.cep ?? "");
+    const servicoId = Number(corpo?.frete?.servicoId);
+
+    if (cepEntrega.length === 8 && melhorEnvioConfigurado()) {
+      try {
+        const opcoes = await cotarFrete(
+          cepEntrega,
+          itens.map((i) => ({ slug: i.slug, quantidade: Number(i.quantidade) })),
+        );
+        const escolhida =
+          opcoes.find((o) => o.id === servicoId) ?? opcoes[0];
+
+        if (escolhida) {
+          freteCentavos = escolhida.preco;
+          descricaoFrete = `${escolhida.nome} — até ${escolhida.prazoDias} dias úteis após a produção`;
+        } else {
+          freteCentavos = LOJA.freteFixo;
+        }
+      } catch (erro) {
+        // Cotação indisponível no momento do checkout: cobra o valor fixo em
+        // vez de barrar a venda. A diferença é acertada no envio.
+        console.error("[checkout] falha ao recotar frete:", erro);
+        freteCentavos = LOJA.freteFixo;
+      }
+    } else {
+      freteCentavos = LOJA.freteFixo;
+    }
+  }
 
   if (freteCentavos > 0) {
     itensCheckout.push({
       name: "Frete",
-      description: "Envio para todo o Brasil",
+      description: descricaoFrete,
       quantity: 1,
       value: freteCentavos / 100,
     });

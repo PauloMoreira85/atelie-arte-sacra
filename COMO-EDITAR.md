@@ -23,8 +23,9 @@ levam para um número inexistente.
 
 ### 2. Preços e medidas — `src/data/produtos.ts`
 
-Todo item marcado com `// REVISAR` é um chute meu. A única medida confirmada é
-a do Porta Terço (17 × 11 × 13 cm), que veio na foto.
+Todo item marcado com `// REVISAR` é um chute meu. As medidas confirmadas
+(vieram nas artes) estão marcadas com ✅: Porta Terço e Nossa Senhora das
+Graças.
 
 Preços são em **centavos**: `18990` = R$ 189,90.
 
@@ -40,8 +41,8 @@ freteGratisAcima: 30000,  // R$ 300,00
 freteFixo: 2500,          // R$ 25,00
 ```
 
-Hoje o frete é um valor fixo. Se quiser cálculo real por CEP (Correios,
-Melhor Envio), me avise que integro.
+Esses valores são o frete de reserva. O cálculo real por CEP já está
+integrado — veja a seção **Ativar o frete calculado** mais abaixo.
 
 ---
 
@@ -94,9 +95,9 @@ As fotos ficam em `public/produtos/`. Cada peça tem duas versões:
 
 Para trocar, substitua os arquivos mantendo os mesmos nomes.
 
-**Fundo das fotos:** o site é claro, então fotos em fundo branco ou claro
-funcionam melhor. Se alguma peça tiver fundo de cor diferente, dá para ajustar
-só ela em `src/data/produtos.ts`:
+**Fundo das artes:** o site é escuro e as artes são feitas em fundo preto com
+a logo embutida. Se alguma peça vier com fundo de cor diferente, dá para
+ajustar só ela em `src/data/produtos.ts`:
 
 ```ts
 fundoCard: "#f3ece2",  // cor de fundo só deste card
@@ -173,6 +174,76 @@ propaga. Não precisa fazer nada.
 
 ---
 
+## 📦 Ativar o frete calculado (Melhor Envio)
+
+Hoje o site cobra **frete fixo** (R$ 25, grátis acima de R$ 300). Para calcular
+o valor real por CEP, ative o Melhor Envio:
+
+1. Crie a conta em [melhorenvio.com.br](https://melhorenvio.com.br) — não tem
+   mensalidade, você paga só a etiqueta (com desconto sobre o balcão).
+2. No painel: **Gerenciar → Tokens → Novo Token**. Dê um nome e marque a
+   permissão **"Cotação de fretes"** — só isso, nada mais. Um token que só
+   cota não consegue comprar etiqueta, então mesmo que vaze ninguém gasta
+   seu dinheiro.
+3. Preencha no `.env.local` (e no painel da Vercel):
+
+```env
+MELHOR_ENVIO_TOKEN="seu-token-aqui"
+CEP_ORIGEM="29700000"
+EMAIL_CONTATO="seu@email.com.br"
+```
+
+O `CEP_ORIGEM` é de onde você posta, e o `EMAIL_CONTATO` é exigido pelo
+Melhor Envio para identificar a aplicação.
+
+### Antes de ativar: pese as caixas ⚖️
+
+Em `src/data/produtos.ts`, cada peça tem um bloco `envio` com **peso e
+medidas da caixa**, hoje preenchido com estimativa:
+
+```ts
+envio: {
+  pesoG: 450,                                        // REVISAR
+  caixa: { altura: 23, largura: 17, comprimento: 19 }, // REVISAR
+},
+```
+
+**Meça e pese uma caixa real de cada peça.** Os Correios cobram pelo maior
+valor entre o peso real e o peso cubado (altura × largura × comprimento ÷
+6000) — se a estimativa estiver baixa, o site cobra menos do que você paga e
+a diferença sai do seu bolso em toda venda.
+
+### Se der problema
+
+O site **nunca deixa de vender** por causa do frete: se o Melhor Envio estiver
+fora do ar ou o token vencer, ele volta sozinho para o frete fixo e marca o
+valor como estimado para o cliente. Você acerta a diferença no envio.
+
+⚠️ Se você usar token do fluxo OAuth em vez do token do painel, ele **vence em
+30 dias** e precisa ser renovado. Prefira o token do painel.
+
+---
+
+## 🧾 Nota fiscal
+
+⚠️ **Importante para Colatina-ES:** o Decreto nº 6.335-R/2026 tornou
+obrigatório, desde 01/04/2026, que MEI com atividade sujeita a ICMS tenha
+**Inscrição Estadual** e **emita documento fiscal eletrônico**. Venda de peça
+impressa em 3D é mercadoria, ou seja, operação com ICMS.
+
+Confirme com seu contador se a sua CNAE está na lista e se a Inscrição
+Estadual já está ativa.
+
+Para emitir, o plano é usar o **Base by Asaas**, que já é usado em outros
+projetos. Para e-commerce com entrega por transportadora o modelo correto é
+**NF-e 55** (a NFC-e 65 não cobre venda interestadual).
+
+Alternativas gratuitas oferecidas pelo próprio ES, caso queira começar sem
+custo: app **Nota Fiscal Fácil (NFF)** — emite pelo celular, sem certificado
+digital — e o emissor gratuito do SEBRAE.
+
+---
+
 ## O que ainda não existe
 
 Coisas que valem a pena num segundo momento — me avise quando quiser:
@@ -180,6 +251,8 @@ Coisas que valem a pena num segundo momento — me avise quando quiser:
 - **Confirmação automática de pagamento** (webhook da Asaas). Hoje o cliente
   é redirecionado de volta e o pedido é dado como recebido; a confirmação real
   você vê no painel da Asaas.
-- **Cálculo de frete por CEP** (hoje é valor fixo).
+- **Compra automática de etiqueta** — hoje o site cota o frete, mas a
+  etiqueta você compra no painel do Melhor Envio. Automatizar isso tem risco
+  (etiqueta comprada por engano custa dinheiro) e pouco ganho no volume atual.
 - **Painel para gerenciar pedidos** (hoje é o painel da Asaas + WhatsApp).
 - **Estoque** — faz sentido só se você passar a produzir por antecipação.

@@ -7,6 +7,7 @@ import { useSearchParams } from "next/navigation";
 import { useCarrinho } from "@/lib/carrinho";
 import { formatarPreco } from "@/data/produtos";
 import { LOJA, linkWhatsApp } from "@/data/loja";
+import { CalculadoraFrete } from "@/components/CalculadoraFrete";
 
 type Cliente = {
   nome: string;
@@ -50,6 +51,7 @@ export function CarrinhoCliente() {
     frete,
     total,
     carregado,
+    freteEscolhido,
     mudarQuantidade,
     remover,
   } = useCarrinho();
@@ -80,6 +82,9 @@ export function CarrinhoCliente() {
             quantidade: l.quantidade,
           })),
           cliente,
+          frete: freteEscolhido
+            ? { cep: freteEscolhido.cep, servicoId: freteEscolhido.id }
+            : undefined,
         }),
       });
 
@@ -255,7 +260,12 @@ export function CarrinhoCliente() {
               <dd className="text-creme-suave">{formatarPreco(subtotal)}</dd>
             </div>
             <div className="flex justify-between">
-              <dt className="text-creme-fraco">Frete</dt>
+              <dt className="text-creme-fraco">
+                Frete
+                {freteEscolhido && frete > 0 && (
+                  <span className="block text-xs">{freteEscolhido.nome}</span>
+                )}
+              </dt>
               <dd className="text-creme-suave">
                 {frete === 0 ? "Grátis" : formatarPreco(frete)}
               </dd>
@@ -268,6 +278,10 @@ export function CarrinhoCliente() {
               frete grátis.
             </p>
           )}
+
+          <div className="my-5 filete-ouro" />
+
+          <CalculadoraFrete />
 
           <div className="my-5 filete-ouro" />
 

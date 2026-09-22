@@ -6,6 +6,7 @@ import {
   useEffect,
   useMemo,
   useReducer,
+  useState,
   type ReactNode,
 } from "react";
 import { PRODUTOS, type Produto } from "@/data/produtos";
@@ -95,6 +96,19 @@ function reducer(estado: Estado, acao: Acao): Estado {
   }
 }
 
+/** Opção de frete escolhida pelo cliente, vinda da cotação. */
+export type FreteEscolhido = {
+  id: number;
+  nome: string;
+  empresa: string;
+  /** Em centavos. */
+  preco: number;
+  prazoDias: number;
+  /** true quando é o valor fixo de reserva, não uma cotação real. */
+  estimado: boolean;
+  cep: string;
+};
+
 /** Item do carrinho já cruzado com os dados do produto. */
 export type LinhaDetalhada = ItemCarrinho & {
   produto: Produto;
@@ -108,6 +122,9 @@ type Contexto = {
   subtotal: number;
   frete: number;
   total: number;
+  /** Frete cotado e escolhido. null enquanto o cliente não informou o CEP. */
+  freteEscolhido: FreteEscolhido | null;
+  definirFrete: (f: FreteEscolhido | null) => void;
   carregado: boolean;
   adicionar: (slug: string, acabamento: string, quantidade?: number) => void;
   remover: (slug: string, acabamento: string) => void;
@@ -126,6 +143,11 @@ export function CarrinhoProvider({ children }: { children: ReactNode }) {
     itens: [],
     carregado: false,
   });
+
+  // O frete fica fora do reducer e não é persistido: uma cotação velha pode
+  // estar desatualizada, e é melhor o cliente recotar do que ver um preço
+  // que não vale mais.
+  const [freteEscolhido, definirFrete] = useState<FreteEscolhido | null>(null);
 
   // Carrega do localStorage depois da montagem, para não quebrar a hidratação.
   useEffect(() => {
@@ -171,8 +193,18 @@ export function CarrinhoProvider({ children }: { children: ReactNode }) {
     });
 
     const subtotal = linhas.reduce((s, l) => s + l.subtotal, 0);
-    const frete =
-      subtotal === 0 || subtotal >= LOJA.freteGratisAcima ? 0 : LOJA.freteFixo;
+
+    // Frete grátis acima do limite continua valendo mesmo com cotação real:
+    // é uma promoção da loja, não um preço da transportadora.
+    const ganhouFreteGratis =
+      subtotal > 0 && subtotal >= LOJA.freteGratisAcima;
+
+    const frete = (() => {
+      if (subtotal === 0) return 0;
+      if (ganhouFreteGratis) return 0;
+      if (freteEscolhido) return freteEscolhido.preco;
+      return LOJA.freteFixo; // antes de cotar, mostra a estimativa
+    })();
 
     return {
       itens: estado.itens,
@@ -181,6 +213,8 @@ export function CarrinhoProvider({ children }: { children: ReactNode }) {
       subtotal,
       frete,
       total: subtotal + frete,
+      freteEscolhido,
+      definirFrete,
       carregado: estado.carregado,
       adicionar: (slug, acabamento, quantidade) =>
         dispatch({ tipo: "adicionar", slug, acabamento, quantidade }),
@@ -190,7 +224,7 @@ export function CarrinhoProvider({ children }: { children: ReactNode }) {
         dispatch({ tipo: "quantidade", slug, acabamento, quantidade }),
       limpar: () => dispatch({ tipo: "limpar" }),
     };
-  }, [estado]);
+  }, [estado, freteEscolhido]);
 
   return (
     <CarrinhoContext.Provider value={valor}>{children}</CarrinhoContext.Provider>
