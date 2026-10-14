@@ -11,15 +11,15 @@ Estes valores são placeholders. O site funciona com eles, mas estão errados.
 ### 1. Contato e redes — `src/data/loja.ts`
 
 ```ts
-whatsapp: "5500000000000",   // ← seu número: 55 + DDD + número, só dígitos
-instagram: "atelie.artesacra",
-email: "contato@atelieartesacra.com.br",
-cidade: "Sua Cidade - UF",
+whatsapp: "5527992314183",        // ✅ já configurado
+instagram: "atelie.artesacra",    // ← TROCAR pelo perfil real
+email: "contato@atelieartesacra.com.br",  // ← TROCAR se usar outro
+cidade: "Colatina - Espírito Santo",  // ✅ já configurado
 url: "https://atelieartesacra.com.br",  // ✅ já configurado
 ```
 
-O WhatsApp é o mais importante: sem ele, todos os botões de "falar com a gente"
-levam para um número inexistente.
+Ainda faltam o **Instagram** e o **e-mail** — hoje são valores de exemplo, e
+os links do rodapé levam a um perfil que pode não existir.
 
 ### 2. Preços e medidas — `src/data/produtos.ts`
 

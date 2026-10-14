@@ -10,14 +10,14 @@ export const LOJA = {
   descricao:
     "Peças de arte sacra impressas em 3D e acabadas à mão. Luminárias, bustos e devocionais feitos sob encomenda.",
 
-  // TROCAR: número com DDI+DDD, só dígitos. Ex: 5511987654321
-  whatsapp: "5500000000000",
+  // DDI 55 + DDD 27 + número. Só dígitos, como o wa.me exige.
+  whatsapp: "5527992314183",
   // TROCAR
   instagram: "atelie.artesacra",
   // TROCAR
   email: "contato@atelieartesacra.com.br",
-  // TROCAR: cidade/UF de onde saem os envios
-  cidade: "Sua Cidade - UF",
+  // Cidade de onde saem os envios.
+  cidade: "Colatina - Espírito Santo",
 
   // Domínio de produção. Usado nas tags de compartilhamento e no sitemap.
   // Sem "www": o www redireciona para cá, então usar a forma canônica evita
