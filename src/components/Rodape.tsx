@@ -92,6 +92,18 @@ export function Rodape() {
         <p>
           © {ano} {LOJA.nome}. Peças feitas sob encomenda, uma a uma.
         </p>
+        {/*
+          Entrada do painel. Fica discreta de propósito: anunciar "Admin" no
+          menu principal só convida visitante curioso a tentar entrar.
+        */}
+        <p className="mt-2">
+          <Link
+            href="/painel"
+            className="text-creme-fraco/50 transition-colors hover:text-ouro-claro"
+          >
+            Painel
+          </Link>
+        </p>
       </div>
     </footer>
   );

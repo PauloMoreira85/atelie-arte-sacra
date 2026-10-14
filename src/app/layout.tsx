@@ -3,6 +3,7 @@ import { Cormorant_Garamond, Inter } from "next/font/google";
 import { CarrinhoProvider } from "@/lib/carrinho";
 import { listarProdutos } from "@/lib/catalogo";
 import { Cabecalho } from "@/components/Cabecalho";
+import { BarraPainel } from "@/components/BarraPainel";
 import { Rodape } from "@/components/Rodape";
 import { LOJA } from "@/data/loja";
 import "./globals.css";
@@ -51,6 +52,7 @@ export default async function RootLayout({
     <html lang="pt-BR" className={`${cormorant.variable} ${inter.variable}`}>
       <body className="min-h-screen flex flex-col">
         <CarrinhoProvider catalogo={catalogo}>
+          <BarraPainel />
           <Cabecalho />
           <main className="flex-1">{children}</main>
           <Rodape />
