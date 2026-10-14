@@ -12,14 +12,15 @@ Estes valores são placeholders. O site funciona com eles, mas estão errados.
 
 ```ts
 whatsapp: "5527992314183",        // ✅ já configurado
-instagram: "atelie.artesacra",    // ← TROCAR pelo perfil real
+instagram: "atelie.arte.sacra",   // ✅ já configurado
 email: "contato@atelieartesacra.com.br",  // ← TROCAR se usar outro
 cidade: "Colatina - Espírito Santo",  // ✅ já configurado
 url: "https://atelieartesacra.com.br",  // ✅ já configurado
 ```
 
-Ainda faltam o **Instagram** e o **e-mail** — hoje são valores de exemplo, e
-os links do rodapé levam a um perfil que pode não existir.
+Ainda falta o **e-mail** — hoje é um valor de exemplo. Se você não tiver um
+e-mail no domínio, pode trocar por um Gmail mesmo; o importante é ser um
+endereço que você leia.
 
 ### 2. Preços e medidas — `src/data/produtos.ts`
 

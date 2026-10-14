@@ -12,8 +12,8 @@ export const LOJA = {
 
   // DDI 55 + DDD 27 + número. Só dígitos, como o wa.me exige.
   whatsapp: "5527992314183",
-  // TROCAR
-  instagram: "atelie.artesacra",
+  // Sem o "@" — ele é adicionado na exibição e o link usa o valor puro.
+  instagram: "atelie.arte.sacra",
   // TROCAR
   email: "contato@atelieartesacra.com.br",
   // Cidade de onde saem os envios.
