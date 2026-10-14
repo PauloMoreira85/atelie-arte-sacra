@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { CardProduto } from "@/components/CardProduto";
-import { PRODUTOS } from "@/data/produtos";
+import { listarProdutos } from "@/lib/catalogo";
 
 export const metadata: Metadata = {
   title: "Loja",
@@ -8,7 +8,8 @@ export const metadata: Metadata = {
     "Todas as peças do ateliê: luminárias, bustos e devocionais em impressão 3D.",
 };
 
-export default function LojaPage() {
+export default async function LojaPage() {
+  const PRODUTOS = await listarProdutos();
   return (
     <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
       <header className="mb-12 text-center">

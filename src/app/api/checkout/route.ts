@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { criarCheckout, asaasConfigurado, type ItemCheckout } from "@/lib/asaas";
-import { PRODUTOS } from "@/data/produtos";
+import { listarProdutos } from "@/lib/catalogo";
 import { cotarFrete, melhorEnvioConfigurado } from "@/lib/melhor-envio";
 import { LOJA } from "@/data/loja";
 
@@ -113,9 +113,10 @@ export async function POST(request: Request) {
   // ── Itens: preço sempre do catálogo do servidor ───────────────────────────
   const itensCheckout: ItemCheckout[] = [];
   let subtotalCentavos = 0;
+  const catalogo = await listarProdutos();
 
   for (const item of itens) {
-    const produto = PRODUTOS.find((p) => p.slug === item?.slug);
+    const produto = catalogo.find((p) => p.slug === item?.slug);
     if (!produto) {
       return NextResponse.json(
         { erro: "Um dos produtos do carrinho não está mais disponível." },

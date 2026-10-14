@@ -1,8 +1,9 @@
 import type { MetadataRoute } from "next";
-import { PRODUTOS, CATEGORIAS } from "@/data/produtos";
+import { listarProdutos, listarCategorias } from "@/lib/catalogo";
 import { LOJA } from "@/data/loja";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const [PRODUTOS, CATEGORIAS] = await Promise.all([listarProdutos(), listarCategorias()]);
   const agora = new Date();
 
   return [

@@ -1,11 +1,15 @@
 import Link from "next/link";
 import Image from "next/image";
 import { CardProduto } from "@/components/CardProduto";
-import { PRODUTOS, produtosDestaque, CATEGORIAS } from "@/data/produtos";
+import { listarProdutos, produtosDestaque, listarCategorias } from "@/lib/catalogo";
 import { LOJA, linkWhatsApp } from "@/data/loja";
 
-export default function Home() {
-  const destaques = produtosDestaque();
+export default async function Home() {
+  const [destaques, PRODUTOS, CATEGORIAS] = await Promise.all([
+    produtosDestaque(),
+    listarProdutos(),
+    listarCategorias(),
+  ]);
 
   return (
     <>

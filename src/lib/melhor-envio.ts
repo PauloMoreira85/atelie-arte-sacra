@@ -1,5 +1,5 @@
 import "server-only";
-import { PRODUTOS } from "@/data/produtos";
+import { listarProdutos } from "@/lib/catalogo";
 
 /**
  * Cliente da API do Melhor Envio. Roda SOMENTE no servidor — o token nunca
@@ -89,8 +89,9 @@ export async function cotarFrete(
   // Monta a lista de produtos a partir do catálogo do servidor. O browser
   // manda só slug e quantidade — peso e medidas nunca vêm dele, senão
   // alguém poderia forjar uma caixa de 1g para pagar frete mínimo.
+  const catalogo = await listarProdutos();
   const produtos = itens.flatMap((item) => {
-    const p = PRODUTOS.find((x) => x.slug === item.slug);
+    const p = catalogo.find((x) => x.slug === item.slug);
     if (!p) return [];
 
     const quantidade = Math.max(1, Math.min(99, Math.trunc(item.quantidade)));

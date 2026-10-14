@@ -3,18 +3,19 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CompraProduto } from "@/components/CompraProduto";
 import { CardProduto } from "@/components/CardProduto";
-import { PRODUTOS, produtoPorSlug, CATEGORIAS } from "@/data/produtos";
+import { CATEGORIAS } from "@/data/produtos";
+import { listarProdutos, produtoPorSlug } from "@/lib/catalogo";
 import { LOJA } from "@/data/loja";
 
 type Props = { params: Promise<{ slug: string }> };
 
-export function generateStaticParams() {
-  return PRODUTOS.map((p) => ({ slug: p.slug }));
+export async function generateStaticParams() {
+  return (await listarProdutos()).map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const produto = produtoPorSlug(slug);
+  const produto = await produtoPorSlug(slug);
   if (!produto) return {};
 
   return {
@@ -30,10 +31,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function ProdutoPage({ params }: Props) {
   const { slug } = await params;
-  const produto = produtoPorSlug(slug);
+  const produto = await produtoPorSlug(slug);
   if (!produto) notFound();
 
-  const relacionados = PRODUTOS.filter(
+  const relacionados = (await listarProdutos()).filter(
     (p) => p.categoria === produto.categoria && p.slug !== produto.slug,
   ).slice(0, 3);
 

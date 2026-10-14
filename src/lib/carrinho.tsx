@@ -9,7 +9,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { PRODUTOS, type Produto } from "@/data/produtos";
+import { type Produto } from "@/data/produtos";
 import { LOJA } from "@/data/loja";
 
 /**
@@ -138,7 +138,18 @@ type Contexto = {
 
 const CarrinhoContext = createContext<Contexto | null>(null);
 
-export function CarrinhoProvider({ children }: { children: ReactNode }) {
+/**
+ * O catálogo chega por prop, vindo do servidor (banco). Antes era importado
+ * do arquivo direto — com o painel, isso faria o carrinho mostrar preço
+ * antigo depois de uma edição.
+ */
+export function CarrinhoProvider({
+  children,
+  catalogo,
+}: {
+  children: ReactNode;
+  catalogo: Produto[];
+}) {
   const [estado, dispatch] = useReducer(reducer, {
     itens: [],
     carregado: false,
@@ -166,7 +177,7 @@ export function CarrinhoProvider({ children }: { children: ReactNode }) {
               typeof i.acabamento === "string" &&
               Number.isFinite(i.quantidade) &&
               i.quantidade > 0 &&
-              PRODUTOS.some((p) => p.slug === i.slug),
+              catalogo.some((p) => p.slug === i.slug),
           );
         }
       }
@@ -174,7 +185,7 @@ export function CarrinhoProvider({ children }: { children: ReactNode }) {
       // localStorage bloqueado ou JSON corrompido: começa vazio.
     }
     dispatch({ tipo: "hidratar", itens });
-  }, []);
+  }, [catalogo]);
 
   useEffect(() => {
     if (!estado.carregado) return;
@@ -187,7 +198,7 @@ export function CarrinhoProvider({ children }: { children: ReactNode }) {
 
   const valor = useMemo<Contexto>(() => {
     const linhas = estado.itens.flatMap<LinhaDetalhada>((item) => {
-      const produto = PRODUTOS.find((p) => p.slug === item.slug);
+      const produto = catalogo.find((p) => p.slug === item.slug);
       if (!produto) return [];
       return [{ ...item, produto, subtotal: produto.preco * item.quantidade }];
     });
@@ -224,7 +235,7 @@ export function CarrinhoProvider({ children }: { children: ReactNode }) {
         dispatch({ tipo: "quantidade", slug, acabamento, quantidade }),
       limpar: () => dispatch({ tipo: "limpar" }),
     };
-  }, [estado, freteEscolhido]);
+  }, [estado, freteEscolhido, catalogo]);
 
   return (
     <CarrinhoContext.Provider value={valor}>{children}</CarrinhoContext.Provider>

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Inter } from "next/font/google";
 import { CarrinhoProvider } from "@/lib/carrinho";
+import { listarProdutos } from "@/lib/catalogo";
 import { Cabecalho } from "@/components/Cabecalho";
 import { Rodape } from "@/components/Rodape";
 import { LOJA } from "@/data/loja";
@@ -39,13 +40,17 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  // O carrinho roda no browser e precisa dos preços atuais para somar.
+  // Buscamos aqui, no servidor, e passamos por prop.
+  const catalogo = await listarProdutos();
+
   return (
     <html lang="pt-BR" className={`${cormorant.variable} ${inter.variable}`}>
       <body className="min-h-screen flex flex-col">
-        <CarrinhoProvider>
+        <CarrinhoProvider catalogo={catalogo}>
           <Cabecalho />
           <main className="flex-1">{children}</main>
           <Rodape />

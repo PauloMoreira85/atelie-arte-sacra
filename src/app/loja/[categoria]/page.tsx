@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CardProduto } from "@/components/CardProduto";
-import { PRODUTOS, CATEGORIAS, type Categoria } from "@/data/produtos";
+import { CATEGORIAS, type Categoria } from "@/data/produtos";
+import { listarProdutos, listarCategorias } from "@/lib/catalogo";
 
 type Props = { params: Promise<{ categoria: string }> };
 
@@ -25,8 +26,12 @@ export default async function CategoriaPage({ params }: Props) {
   const { categoria } = await params;
   if (!ehCategoria(categoria)) notFound();
 
-  const info = CATEGORIAS[categoria];
-  const itens = PRODUTOS.filter((p) => p.categoria === categoria);
+  const [todas, produtos] = await Promise.all([
+    listarCategorias(),
+    listarProdutos(),
+  ]);
+  const info = todas[categoria];
+  const itens = produtos.filter((p) => p.categoria === categoria);
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
