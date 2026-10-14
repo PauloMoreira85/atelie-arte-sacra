@@ -189,12 +189,15 @@ o valor real por CEP, ative o Melhor Envio:
 
 ```env
 MELHOR_ENVIO_TOKEN="seu-token-aqui"
-CEP_ORIGEM="29700000"
+CEP_ORIGEM="29700010"
 EMAIL_CONTATO="seu@email.com.br"
 ```
 
-O `CEP_ORIGEM` é de onde você posta, e o `EMAIL_CONTATO` é exigido pelo
-Melhor Envio para identificar a aplicação.
+O `CEP_ORIGEM` já está preenchido com **29700-010** (Centro de Colatina). Se
+as encomendas saírem de outro endereço, troque — mas entre bairros da mesma
+cidade a diferença de frete é mínima.
+
+O `EMAIL_CONTATO` é exigido pelo Melhor Envio para identificar a aplicação.
 
 ### Antes de ativar: pese as caixas ⚖️
 

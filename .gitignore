@@ -32,6 +32,9 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+# ...mas o .env.example vai para o repositorio: ele so lista os NOMES das
+# variaveis, sem nenhum valor secreto, e serve de modelo para quem clonar.
+!.env.example
 
 # vercel
 .vercel
