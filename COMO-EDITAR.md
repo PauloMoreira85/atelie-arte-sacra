@@ -248,6 +248,48 @@ digital — e o emissor gratuito do SEBRAE.
 
 ---
 
+## 🔐 Painel de administração
+
+Acesse em **/painel** (ex.: https://atelieartesacra.com.br/painel) com seu
+usuário e PIN de 6 dígitos.
+
+Pelo painel você edita, sem mexer em código e sem esperar deploy:
+preço, nome, resumo e descrição, medidas, peso e caixa de envio, acabamentos,
+imagens, prazo de produção, e se a peça aparece na loja e na home.
+
+**A alteração vale na hora** — salvou, o site já mostra.
+
+### Segurança
+
+- O PIN é guardado só como código embaralhado (hash). Nem eu consigo ler.
+- Após 4 tentativas erradas, o acesso trava por 1 minuto, depois 2, 4, 8, 16
+  e até 30 minutos. Isso torna inviável alguém tentar adivinhar o PIN.
+- Toda alteração de preço fica registrada com quem fez e os valores antes e
+  depois.
+
+### Adicionar ou remover uma pessoa
+
+Me peça, ou rode no SQL Editor do Supabase:
+
+```sql
+-- criar ou trocar o PIN de alguém
+select public.definir_usuario_painel('usuario', 'Nome da Pessoa', '123456');
+
+-- tirar o acesso sem apagar o histórico
+update public.usuarios_painel set ativo = false where usuario = 'usuario';
+```
+
+### Se o banco cair
+
+O site **continua funcionando**: ele volta a ler o catálogo de
+`src/data/produtos.ts` automaticamente. O painel fica fora do ar, a loja não.
+
+⚠️ Mas atenção: nesse caso a loja mostra os preços do ARQUIVO, que podem estar
+desatualizados. Se você mudar preços pelo painel, vale pedir para eu
+sincronizar o arquivo de vez em quando.
+
+---
+
 ## O que ainda não existe
 
 Coisas que valem a pena num segundo momento — me avise quando quiser:
@@ -258,5 +300,8 @@ Coisas que valem a pena num segundo momento — me avise quando quiser:
 - **Compra automática de etiqueta** — hoje o site cota o frete, mas a
   etiqueta você compra no painel do Melhor Envio. Automatizar isso tem risco
   (etiqueta comprada por engano custa dinheiro) e pouco ganho no volume atual.
-- **Painel para gerenciar pedidos** (hoje é o painel da Asaas + WhatsApp).
+- **Painel de pedidos** — o painel atual cuida só dos produtos; os pedidos
+  continuam no painel da Asaas. O projeto Nexo 3D já tem essa parte pronta,
+  junto com emissão de NF-e pelo Base ERP e compra de etiqueta no Melhor
+  Envio — dá para portar quando quiser.
 - **Estoque** — faz sentido só se você passar a produzir por antecipação.
