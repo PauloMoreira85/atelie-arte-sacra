@@ -140,7 +140,10 @@ export async function POST(request: Request) {
     subtotalCentavos += produto.preco * quantidade;
     itensCheckout.push({
       name: produto.nome,
-      description: `Acabamento: ${acabamento}`,
+      // A conta Asaas é compartilhada com outras lojas do mesmo CNPJ, então
+      // a descrição diz de qual site veio a venda. Junto com a referência
+      // externa (AAS-...), é isso que permite separar o extrato depois.
+      description: `${LOJA.nome} · Acabamento: ${acabamento}`,
       quantity: quantidade,
       value: produto.preco / 100, // Asaas espera reais
     });

@@ -16,8 +16,9 @@ export const LOJA = {
   instagram: "atelie.arte.sacra",
   // TROCAR
   email: "contato@atelieartesacra.com.br",
-  // Cidade de onde saem os envios.
-  cidade: "Colatina - Espírito Santo",
+  // Cidade de onde saem os envios — é o que o cliente vê. As peças são
+  // produzidas em Colatina-ES, mas a expedição e a nota saem de Maringá.
+  cidade: "Enviamos de Maringá - PR",
 
   // Domínio de produção. Usado nas tags de compartilhamento e no sitemap.
   // Sem "www": o www redireciona para cá, então usar a forma canônica evita
