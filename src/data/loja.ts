@@ -11,6 +11,10 @@ export const LOJA = {
     "Peças de arte sacra impressas em 3D e acabadas à mão. Luminárias, bustos e devocionais feitos sob encomenda.",
 
   // DDI 55 + DDD 27 + número. Só dígitos, como o wa.me exige.
+  //
+  // É o número da Priscilla, no ES — intencional: ela faz o atendimento,
+  // mesmo com a expedição saindo de Maringá. Não trocar por engano achando
+  // que o DDD está errado.
   whatsapp: "5527992314183",
   // Sem o "@" — ele é adicionado na exibição e o link usa o valor puro.
   instagram: "atelie.arte.sacra",
