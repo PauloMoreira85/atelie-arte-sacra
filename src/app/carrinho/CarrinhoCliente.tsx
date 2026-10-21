@@ -66,8 +66,19 @@ export function CarrinhoCliente() {
   const campo = (chave: keyof Cliente) => (valor: string) =>
     setCliente((c) => ({ ...c, [chave]: valor }));
 
+  // Acima do limite o frete é grátis e o CEP não é necessário aqui — ele é
+  // pedido na página de pagamento.
+  const precisaCalcularFrete =
+    subtotal < LOJA.freteGratisAcima && !freteEscolhido;
+
   async function finalizar(evento: React.FormEvent) {
     evento.preventDefault();
+
+    if (precisaCalcularFrete) {
+      setErro("Calcule o frete antes de finalizar o pedido.");
+      return;
+    }
+
     setErro(null);
     setEnviando(true);
 
@@ -267,7 +278,11 @@ export function CarrinhoCliente() {
                 )}
               </dt>
               <dd className="text-creme-suave">
-                {frete === 0 ? "Grátis" : formatarPreco(frete)}
+                {precisaCalcularFrete
+                  ? "calcule abaixo"
+                  : frete === 0
+                    ? "Grátis"
+                    : formatarPreco(frete)}
               </dd>
             </div>
           </dl>
@@ -288,7 +303,7 @@ export function CarrinhoCliente() {
           <div className="flex items-baseline justify-between">
             <span className="text-creme">Total</span>
             <span className="text-2xl text-ouro-claro">
-              {formatarPreco(total)}
+              {precisaCalcularFrete ? "—" : formatarPreco(total)}
             </span>
           </div>
 
@@ -341,10 +356,14 @@ export function CarrinhoCliente() {
 
             <button
               type="submit"
-              disabled={enviando}
+              disabled={enviando || precisaCalcularFrete}
               className="w-full rounded-full bg-ouro px-6 py-3 text-sm font-medium text-preto transition-colors hover:bg-ouro-claro disabled:cursor-not-allowed disabled:opacity-60"
             >
-              {enviando ? "Abrindo pagamento…" : "Ir para o pagamento"}
+              {enviando
+                ? "Abrindo pagamento…"
+                : precisaCalcularFrete
+                  ? "Calcule o frete acima"
+                  : "Ir para o pagamento"}
             </button>
           </form>
 

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useCarrinho, type FreteEscolhido } from "@/lib/carrinho";
 import { formatarPreco } from "@/data/produtos";
-import { LOJA } from "@/data/loja";
+import { LOJA, linkWhatsApp } from "@/data/loja";
 
 type Opcao = Omit<FreteEscolhido, "estimado" | "cep">;
 
@@ -20,6 +20,7 @@ export function CalculadoraFrete() {
   const [estimado, setEstimado] = useState(false);
   const [carregando, setCarregando] = useState(false);
   const [erro, setErro] = useState<string | null>(null);
+  const [pedirWhatsApp, setPedirWhatsApp] = useState(false);
 
   const temFreteGratis = subtotal >= LOJA.freteGratisAcima;
 
@@ -53,8 +54,10 @@ export function CalculadoraFrete() {
 
       if (!resposta.ok) {
         setErro(dados?.erro ?? "Não foi possível calcular o frete.");
+        setPedirWhatsApp(Boolean(dados?.combinarWhatsApp));
         return;
       }
+      setPedirWhatsApp(false);
 
       setOpcoes(dados.opcoes);
       setEstimado(Boolean(dados.estimado));
@@ -108,9 +111,21 @@ export function CalculadoraFrete() {
           </form>
 
           {erro && (
-            <p className="mt-2 text-sm text-red-300" role="alert">
-              {erro}
-            </p>
+            <div className="mt-2" role="alert">
+              <p className="text-sm text-red-300">{erro}</p>
+              {pedirWhatsApp && (
+                <a
+                  href={linkWhatsApp(
+                    `Olá! Queria comprar no site, mas o frete para o CEP ${cep} não calculou. Podem me ajudar?`,
+                  )}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-2 inline-block rounded-full border border-ouro/40 px-4 py-2 text-xs text-creme transition-colors hover:border-ouro hover:text-ouro-claro"
+                >
+                  Combinar o frete no WhatsApp
+                </a>
+              )}
+            </div>
           )}
 
           {opcoes && opcoes.length > 0 && (
@@ -151,10 +166,9 @@ export function CalculadoraFrete() {
             </ul>
           )}
 
-          {opcoes && estimado && (
+          {!opcoes && !erro && (
             <p className="mt-2 text-xs text-creme-fraco">
-              Valor estimado. O frete exato é confirmado quando combinarmos o
-              envio com você.
+              Informe o CEP para ver o valor e o prazo da entrega.
             </p>
           )}
         </>

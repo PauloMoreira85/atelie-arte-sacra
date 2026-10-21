@@ -160,29 +160,50 @@ export async function POST(request: Request) {
     const cepEntrega = soDigitos(corpo?.frete?.cep ?? "");
     const servicoId = Number(corpo?.frete?.servicoId);
 
-    if (cepEntrega.length === 8 && melhorEnvioConfigurado()) {
-      try {
-        const opcoes = await cotarFrete(
-          cepEntrega,
-          itens.map((i) => ({ slug: i.slug, quantidade: Number(i.quantidade) })),
-        );
-        const escolhida =
-          opcoes.find((o) => o.id === servicoId) ?? opcoes[0];
+    // Sem CEP não há como cobrar frete — e cobrar um valor chutado sairia do
+    // bolso da loja, já que o frete real vai de R$ 19 a mais de R$ 100.
+    if (cepEntrega.length !== 8 || !melhorEnvioConfigurado()) {
+      return NextResponse.json(
+        {
+          erro: "Calcule o frete antes de finalizar o pedido.",
+          codigo: "frete_nao_calculado",
+        },
+        { status: 400 },
+      );
+    }
 
-        if (escolhida) {
-          freteCentavos = escolhida.preco;
-          descricaoFrete = `${escolhida.nome} — até ${escolhida.prazoDias} dias úteis após a produção`;
-        } else {
-          freteCentavos = LOJA.freteFixo;
-        }
-      } catch (erro) {
-        // Cotação indisponível no momento do checkout: cobra o valor fixo em
-        // vez de barrar a venda. A diferença é acertada no envio.
-        console.error("[checkout] falha ao recotar frete:", erro);
-        freteCentavos = LOJA.freteFixo;
+    try {
+      const opcoes = await cotarFrete(
+        cepEntrega,
+        itens.map((i) => ({ slug: i.slug, quantidade: Number(i.quantidade) })),
+      );
+      const escolhida = opcoes.find((o) => o.id === servicoId) ?? opcoes[0];
+
+      if (!escolhida) {
+        return NextResponse.json(
+          {
+            erro:
+              "Não há entrega disponível para este CEP. Fale com a gente pelo WhatsApp que combinamos o envio.",
+            codigo: "sem_cobertura",
+          },
+          { status: 422 },
+        );
       }
-    } else {
-      freteCentavos = LOJA.freteFixo;
+
+      freteCentavos = escolhida.preco;
+      descricaoFrete = `${escolhida.nome} — até ${escolhida.prazoDias} dias úteis após a produção`;
+    } catch (erro) {
+      // Preferimos barrar a venda a cobrar um frete inventado: o prejuízo de
+      // um envio mal cobrado é maior que o de um pedido adiado por minutos.
+      console.error("[checkout] falha ao recotar frete:", erro);
+      return NextResponse.json(
+        {
+          erro:
+            "Não conseguimos confirmar o frete agora. Tente de novo em instantes ou finalize pelo WhatsApp.",
+          codigo: "falha_frete",
+        },
+        { status: 502 },
+      );
     }
   }
 
@@ -197,15 +218,21 @@ export async function POST(request: Request) {
 
   const referencia = `AAS-${Date.now()}-${Math.random().toString(36).slice(2, 8).toUpperCase()}`;
 
-  // Usa a origem real da requisição para os retornos, para funcionar igual em
-  // localhost, preview da Vercel e domínio final.
-  const origem = new URL(request.url).origin;
+  // Usa a origem real da requisição para os retornos. Em localhost a Asaas
+  // rejeita as URLs de callback ("campo successUrl é inválido"), então
+  // caímos no domínio de produção — o fluxo de teste local funciona e em
+  // produção a origem já é a correta.
+  const origemReq = new URL(request.url).origin;
+  const origem = /localhost|127\.0\.0\.1/.test(origemReq)
+    ? LOJA.url
+    : origemReq;
 
   try {
     const checkout = await criarCheckout({
       itens: itensCheckout,
       referenciaExterna: referencia,
       cliente: { name: nome, email, phone: telefone, cpfCnpj },
+      comEntrega: freteCentavos > 0,
       urls: {
         sucesso: `${origem}/pedido/confirmado?ref=${referencia}`,
         cancelado: `${origem}/carrinho?status=cancelado`,

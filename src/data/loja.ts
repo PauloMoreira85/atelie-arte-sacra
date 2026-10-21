@@ -26,9 +26,7 @@ export const LOJA = {
   url: "https://atelieartesacra.com.br",
 
   /** Frete grátis a partir deste valor, em centavos. */
-  freteGratisAcima: 30000,
-  /** Frete fixo cobrado abaixo do limite acima, em centavos. REVISAR. */
-  freteFixo: 2500,
+  freteGratisAcima: 40000,
 } as const;
 
 export const linkWhatsApp = (mensagem: string) =>

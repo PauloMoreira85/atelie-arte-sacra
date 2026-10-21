@@ -214,7 +214,9 @@ export function CarrinhoProvider({
       if (subtotal === 0) return 0;
       if (ganhouFreteGratis) return 0;
       if (freteEscolhido) return freteEscolhido.preco;
-      return LOJA.freteFixo; // antes de cotar, mostra a estimativa
+      // Antes de cotar o frete é desconhecido, não zero: o total só fica
+      // completo depois que o cliente informa o CEP.
+      return 0;
     })();
 
     return {

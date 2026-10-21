@@ -27,13 +27,16 @@ function config() {
   }
 
   // Armadilha conhecida: a chave da Asaas começa com "$aact_...". Em arquivos
-  // .env o cifrão é tratado como expansão de variável, então uma chave colada
-  // sem aspas duplas chega aqui vazia ou truncada — e a loja quebraria só na
-  // hora do pagamento. Avisamos cedo e com a solução explícita.
+  // .env o cifrão é tratado como expansão de variável e a chave chega vazia —
+  // a loja só quebraria na hora do pagamento.
+  //
+  // ⚠️ Aspas duplas NÃO bastam: o dotenv expande "$" mesmo dentro delas. É
+  // preciso escapar com barra invertida:
+  //     ASAAS_API_KEY="\$aact_prod_..."
   if (apiKey.startsWith("aact_") || apiKey.length < 20) {
     throw new Error(
-      'ASAAS_API_KEY parece truncada. No .env, a chave PRECISA estar entre ' +
-        'aspas duplas por causa do "$" inicial: ASAAS_API_KEY="$aact_..."',
+      'ASAAS_API_KEY parece truncada. No .env, escape o cifrão inicial: ' +
+        'ASAAS_API_KEY="\$aact_..." (a barra antes do $ é obrigatória).',
     );
   }
   // Chaves de sandbox da Asaas começam com $aact_hmlg_. Detectamos o ambiente
@@ -54,6 +57,8 @@ export type ItemCheckout = {
 
 export type DadosCheckout = {
   itens: ItemCheckout[];
+  /** true quando o pedido tem frete — a Asaas passa a exigir endereço. */
+  comEntrega?: boolean;
   /** Referência do pedido no nosso lado, para conciliar depois. */
   referenciaExterna: string;
   cliente: {
@@ -74,6 +79,10 @@ export async function criarCheckout(
 ): Promise<RespostaCheckout> {
   const { apiKey, baseUrl } = config();
 
+  // Com entrega, a Asaas valida o endereço dentro de customerData. Como não
+  // coletamos rua/número no carrinho, deixamos ela pedir tudo na tela dela.
+  const cliente = dados.comEntrega ? undefined : dados.cliente;
+
   const corpo: Record<string, unknown> = {
     billingTypes: ["PIX", "CREDIT_CARD"],
     chargeTypes: dados.parcelasMax && dados.parcelasMax > 1
@@ -82,7 +91,7 @@ export async function criarCheckout(
     minutesToExpire: 60,
     externalReference: dados.referenciaExterna,
     items: dados.itens,
-    customerData: dados.cliente,
+    ...(cliente ? { customerData: cliente } : {}),
     callback: {
       successUrl: dados.urls.sucesso,
       cancelUrl: dados.urls.cancelado,
