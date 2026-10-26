@@ -3,6 +3,7 @@ import { criarCheckout, asaasConfigurado, type ItemCheckout } from "@/lib/asaas"
 import { listarProdutos } from "@/lib/catalogo";
 import { cotarFrete, melhorEnvioConfigurado } from "@/lib/melhor-envio";
 import { LOJA } from "@/data/loja";
+import { db, supabaseConfigurado } from "@/lib/supabase";
 
 /**
  * Cria o checkout na Asaas e devolve o link de pagamento.
@@ -22,7 +23,62 @@ type CorpoPedido = {
   cliente: { nome: string; email: string; telefone: string; cpfCnpj: string };
   /** CEP e serviço escolhidos na calculadora. O preço é recotado no servidor. */
   frete?: { cep?: string; servicoId?: number };
+  /** UTMs e IDs de clique guardados no browser (lib/rastreamento). */
+  origem?: Record<string, unknown>;
 };
+
+/** Só estes campos de origem são aceitos; o resto do objeto é descartado. */
+const CAMPOS_ORIGEM = [
+  "utm_source",
+  "utm_medium",
+  "utm_campaign",
+  "utm_term",
+  "utm_content",
+  "gclid",
+  "gbraid",
+  "wbraid",
+  "fbclid",
+  "pagina_entrada",
+  "capturada_em",
+] as const;
+
+function limparOrigem(bruta: unknown) {
+  if (!bruta || typeof bruta !== "object") return null;
+  const origem: Partial<Record<(typeof CAMPOS_ORIGEM)[number], string>> = {};
+  for (const campo of CAMPOS_ORIGEM) {
+    const v = (bruta as Record<string, unknown>)[campo];
+    if (typeof v === "string" && v.trim()) origem[campo] = v.trim().slice(0, 200);
+  }
+  return Object.keys(origem).length > 0 ? origem : null;
+}
+
+/**
+ * Grava de qual anúncio/campanha veio o pedido, para cruzar com o extrato da
+ * Asaas pela referência. Nunca derruba a venda: se a tabela ainda não existe
+ * (veja criar-pedidos-origem.sql) ou o banco falhar, só registra no log.
+ */
+async function registrarOrigem(
+  referencia: string,
+  valorCentavos: number,
+  origem: ReturnType<typeof limparOrigem>,
+) {
+  if (!origem) return;
+  console.info("[checkout] origem do pedido", referencia, origem);
+  if (!supabaseConfigurado()) return;
+
+  const { capturada_em, ...campos } = origem;
+  try {
+    const { error } = await db().from("pedidos_origem").insert({
+      referencia,
+      valor_centavos: valorCentavos,
+      ...campos,
+      origem_capturada_em: capturada_em ?? null,
+    });
+    if (error) console.warn("[checkout] não gravou a origem:", error.message);
+  } catch (erro) {
+    console.warn("[checkout] não gravou a origem:", erro);
+  }
+}
 
 const soDigitos = (s: string) => s.replace(/\D/g, "");
 
@@ -241,7 +297,17 @@ export async function POST(request: Request) {
       parcelasMax: 6,
     });
 
-    return NextResponse.json({ link: checkout.link, referencia });
+    const totalCentavos = subtotalCentavos + freteCentavos;
+    await registrarOrigem(referencia, totalCentavos, limparOrigem(corpo.origem));
+
+    // valor/frete voltam para o browser medir a compra com o total que a
+    // Asaas vai cobrar (o frete foi recotado aqui).
+    return NextResponse.json({
+      link: checkout.link,
+      referencia,
+      valor: totalCentavos / 100,
+      frete: freteCentavos / 100,
+    });
   } catch (erro) {
     console.error("[checkout] falha ao criar na Asaas:", erro);
     return NextResponse.json(

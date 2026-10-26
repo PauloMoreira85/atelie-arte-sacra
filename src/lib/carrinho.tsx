@@ -92,6 +92,10 @@ function reducer(estado: Estado, acao: Acao): Estado {
     }
 
     case "limpar":
+      // Devolver o MESMO estado quando já está vazio é o que encerra o ciclo
+      // da página de confirmação: limpar() → novo estado → nova função
+      // limpar → efeito roda de novo → limpar()... (Maximum update depth).
+      if (estado.itens.length === 0) return estado;
       return { ...estado, itens: [] };
   }
 }

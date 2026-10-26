@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { useCarrinho } from "@/lib/carrinho";
 import { LOJA, linkWhatsApp } from "@/data/loja";
+import { registrarCompra } from "@/lib/rastreamento";
 
 export function ConfirmacaoCliente() {
   const { limpar, carregado } = useCarrinho();
@@ -15,6 +16,13 @@ export function ConfirmacaoCliente() {
   useEffect(() => {
     if (carregado) limpar();
   }, [carregado, limpar]);
+
+  // A Asaas só manda para cá depois do Pix pago ou do cartão aprovado.
+  // registrarCompra ignora referência desconhecida ou já contada, então
+  // recarregar a página não duplica a venda.
+  useEffect(() => {
+    if (referencia) registrarCompra(referencia);
+  }, [referencia]);
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-24 text-center sm:px-6">

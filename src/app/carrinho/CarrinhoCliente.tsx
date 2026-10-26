@@ -8,6 +8,12 @@ import { useCarrinho } from "@/lib/carrinho";
 import { formatarPreco } from "@/data/produtos";
 import { LOJA, linkWhatsApp } from "@/data/loja";
 import { CalculadoraFrete } from "@/components/CalculadoraFrete";
+import {
+  guardarPedidoAberto,
+  iniciarCheckout,
+  itemDoProduto,
+  lerOrigem,
+} from "@/lib/rastreamento";
 
 type Cliente = {
   nome: string;
@@ -82,6 +88,11 @@ export function CarrinhoCliente() {
     setErro(null);
     setEnviando(true);
 
+    const itensRastreados = linhas.map((l) =>
+      itemDoProduto(l.produto, l.quantidade, l.acabamento),
+    );
+    iniciarCheckout(itensRastreados, total);
+
     try {
       const resposta = await fetch("/api/checkout", {
         method: "POST",
@@ -96,6 +107,9 @@ export function CarrinhoCliente() {
           frete: freteEscolhido
             ? { cep: freteEscolhido.cep, servicoId: freteEscolhido.id }
             : undefined,
+          // De qual anúncio/campanha o cliente veio, para ligar a venda à
+          // origem. Não interfere no pedido.
+          origem: lerOrigem() ?? undefined,
         }),
       });
 
@@ -105,6 +119,17 @@ export function CarrinhoCliente() {
         setErro(dados?.erro ?? "Não foi possível abrir o pagamento.");
         setEnviando(false);
         return;
+      }
+
+      // Retrato do pedido para a página de retorno disparar a compra com o
+      // valor certo (ela só recebe a referência na URL). O valor vem do
+      // servidor, que recotou o frete.
+      if (dados.referencia) {
+        guardarPedidoAberto(dados.referencia, {
+          itens: itensRastreados,
+          valor: Number(dados.valor) > 0 ? Math.round(dados.valor * 100) : total,
+          frete: Number(dados.frete) >= 0 ? Math.round(dados.frete * 100) : frete,
+        });
       }
 
       // O carrinho só é limpo depois do pagamento confirmado (na página de

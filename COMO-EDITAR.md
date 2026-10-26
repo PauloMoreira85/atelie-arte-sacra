@@ -290,6 +290,72 @@ sincronizar o arquivo de vez em quando.
 
 ---
 
+## 📈 Rastreamento de anúncios (Google e Meta)
+
+O site já manda os eventos de loja para o **Google Analytics 4**, o
+**Google Ads** e o **Meta Pixel** (Instagram/Facebook). Falta só preencher
+os IDs. **Cada ferramenta só carrega se o ID dela estiver preenchido** —
+vazio, ela fica desligada e o site funciona igual.
+
+### Onde configurar
+
+Na Vercel: **Settings → Environment Variables** (ambiente *Production*),
+depois um novo deploy. Para testar na sua máquina, no `.env.local`.
+
+| Variável | Onde pegar | Exemplo |
+|---|---|---|
+| `NEXT_PUBLIC_GA4_ID` | Google Analytics → Administrador → Fluxos de dados → ID da métrica | `G-XXXXXXXXXX` |
+| `NEXT_PUBLIC_GADS_ID` | Google Ads → Metas → Conversões → ação de compra → Configuração da tag | `AW-123456789` |
+| `NEXT_PUBLIC_GADS_PURCHASE_LABEL` | mesmo lugar: o texto depois da `/` em `send_to` | `AbCdEfGhIjKl` |
+| `NEXT_PUBLIC_META_PIXEL_ID` | Meta → Gerenciador de Eventos → Fontes de dados → ID do pixel | `1234567890123456` |
+
+### Eventos enviados
+
+Todos com moeda **BRL**, e os de produto com id (slug), nome, acabamento,
+preço e quantidade.
+
+| Quando | GA4 / Google Ads | Meta |
+|---|---|---|
+| Cada página aberta, inclusive navegando sem recarregar | `page_view` | `PageView` |
+| Página de uma peça | `view_item` | `ViewContent` |
+| Botão "Adicionar ao carrinho" | `add_to_cart` | `AddToCart` |
+| Botão "Ir para o pagamento" | `begin_checkout` | `InitiateCheckout` |
+| Volta da Asaas com o pagamento aprovado | `purchase` + conversão do Google Ads | `Purchase` |
+| Clique em qualquer link do WhatsApp | `generate_lead` | `Contact` |
+
+O **painel** (`/painel`) não é medido.
+
+### Como a compra é contada
+
+O pagamento é feito na página da Asaas. Quando o Pix é pago ou o cartão
+aprovado, a Asaas devolve o cliente para `/pedido/confirmado?ref=AAS-...`.
+Ao abrir o pagamento, o site guarda no navegador do cliente os itens e o
+total (com o frete recotado no servidor); na volta, dispara a compra com
+esse valor e com o **número do pedido** (`AAS-...`) como `transaction_id` no
+Google e `eventID` no Meta.
+
+- Recarregar a página de confirmação **não** conta a venda de novo.
+- Se o cliente pagar num aparelho e voltar em outro, ou abrir o link de
+  confirmação depois de dias, a venda não é medida — preferimos perder uma
+  conversão rara a inflar os números.
+
+### De onde veio cada venda
+
+Quando alguém entra por um anúncio, o site guarda por 90 dias os parâmetros
+`utm_*`, `gclid`, `gbraid`, `wbraid` e `fbclid` e os envia junto com o
+pedido. Hoje eles aparecem no log da Vercel (`[checkout] origem do pedido`).
+Para gravar no banco, rode uma vez o arquivo `criar-pedidos-origem.sql` no
+SQL Editor do Supabase: a partir daí cada checkout aberto ganha uma linha na
+tabela `pedidos_origem`, ligada ao extrato da Asaas pela referência.
+
+### Conferir se está funcionando
+
+- **Meta:** extensão *Meta Pixel Helper* no Chrome, ou Gerenciador de Eventos
+  → Testar eventos.
+- **Google:** extensão *Tag Assistant*, ou GA4 → Relatórios → Tempo real.
+
+---
+
 ## O que ainda não existe
 
 Coisas que valem a pena num segundo momento — me avise quando quiser:

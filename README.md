@@ -12,6 +12,9 @@ devocionais e lembrancinhas, produzidas sob encomenda.
 - **Tailwind CSS 4** — paleta tirada da logo (dourado, creme, marrom)
 - **Asaas** — checkout hospedado com Pix, cartão e boleto
 - Carrinho no `localStorage`, sem banco de dados
+- **GA4 + Google Ads + Meta Pixel** — eventos de e-commerce para tráfego
+  pago; IDs por variável de ambiente (veja COMO-EDITAR.md → Rastreamento de
+  anúncios)
 
 ## Rodar
 
@@ -30,6 +33,7 @@ src/
   lib/
     carrinho.tsx    ← estado do carrinho (context + localStorage)
     asaas.ts        ← cliente da API de pagamento (só servidor)
+    rastreamento.ts ← GA4/Google Ads/Meta: eventos e origem do visitante
   components/       ← cabeçalho, rodapé, card, galeria de compra
   app/
     api/checkout/   ← cria o pagamento (valida preço no servidor)
