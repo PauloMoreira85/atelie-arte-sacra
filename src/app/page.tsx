@@ -52,8 +52,8 @@ export default async function Home() {
           <div className="relative aspect-square">
             <div className="halo-ouro absolute inset-0 scale-125" />
             <Image
-              src="/produtos/anjo-luminaria.webp"
-              alt="Anjo Luminária acesa, em luz quente"
+              src="/produtos/sagrado-coracao-jesus-hero.webp"
+              alt="Busto do Sagrado Coração de Jesus, em mármore com detalhes dourados"
               fill
               sizes="(max-width: 1024px) 100vw, 50vw"
               className="object-contain"
