@@ -1,12 +1,11 @@
 import Link from "next/link";
 import Image from "next/image";
 import { CardProduto } from "@/components/CardProduto";
-import { listarProdutos, produtosDestaque, listarCategorias } from "@/lib/catalogo";
+import { listarProdutos, listarCategorias } from "@/lib/catalogo";
 import { LOJA, linkWhatsApp } from "@/data/loja";
 
 export default async function Home() {
-  const [destaques, PRODUTOS, CATEGORIAS] = await Promise.all([
-    produtosDestaque(),
+  const [PRODUTOS, CATEGORIAS] = await Promise.all([
     listarProdutos(),
     listarCategorias(),
   ]);
@@ -31,12 +30,12 @@ export default async function Home() {
             </p>
 
             <div className="mt-9 flex flex-wrap gap-4">
-              <Link
-                href="/loja"
+              <a
+                href="#pecas"
                 className="rounded-full bg-ouro px-8 py-3 text-sm font-medium tracking-wide text-preto transition-colors hover:bg-ouro-claro"
               >
-                Ver todas as peças
-              </Link>
+                Ver as peças
+              </a>
               <a
                 href={linkWhatsApp(
                   "Olá! Vim pelo site e gostaria de fazer uma encomenda.",
@@ -64,18 +63,24 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* Destaques */}
-      <section className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
+      {/*
+        Catálogo completo na home: o cliente vê todas as peças sem precisar
+        clicar em "Loja" primeiro. Cada clique a menos é uma chance a mais
+        de venda.
+      */}
+      <section id="pecas" className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
         <div className="mb-10 text-center">
-          <h2 className="font-display text-4xl text-creme">As mais pedidas</h2>
+          <h2 className="font-display text-4xl text-creme">Nossas peças</h2>
           <p className="mt-3 text-creme-fraco">
-            As peças que mais saem do ateliê.
+            Todas feitas sob encomenda, uma a uma.
           </p>
         </div>
 
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {destaques.map((p, i) => (
-            <CardProduto key={p.slug} produto={p} prioridade={i === 0} />
+          {PRODUTOS.map((p, i) => (
+            // As três primeiras carregam com prioridade: são as que aparecem
+            // antes de rolar a página.
+            <CardProduto key={p.slug} produto={p} prioridade={i < 3} />
           ))}
         </div>
       </section>
