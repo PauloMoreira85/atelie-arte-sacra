@@ -24,7 +24,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     openGraph: {
       title: `${produto.nome} · ${LOJA.nome}`,
       description: produto.resumo,
-      images: [{ url: produto.imagens[0] }],
+      // Sem foto, omite a imagem em vez de gerar uma tag vazia.
+      ...(produto.imagens[0] ? { images: [{ url: produto.imagens[0] }] } : {}),
     },
   };
 }

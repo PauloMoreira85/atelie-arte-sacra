@@ -2,9 +2,14 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useCarrinho } from "@/lib/carrinho";
 import { formatarPreco, type Produto } from "@/data/produtos";
+import {
+  adicionarAoCarrinho,
+  itemDoProduto,
+  verItem,
+} from "@/lib/rastreamento";
 
 /**
  * Galeria + escolha de acabamento e quantidade + adicionar ao carrinho.
@@ -17,12 +22,22 @@ export function CompraProduto({ produto }: { produto: Produto }) {
   const [quantidade, setQuantidade] = useState(1);
   const [adicionado, setAdicionado] = useState(false);
 
+  // Uma visualização por peça aberta (o ref evita a contagem dupla do
+  // StrictMode em desenvolvimento).
+  const vistoRastreado = useRef("");
+  useEffect(() => {
+    if (vistoRastreado.current === produto.slug) return;
+    vistoRastreado.current = produto.slug;
+    verItem(itemDoProduto(produto));
+  }, [produto]);
+
   const fundo = produto.fundoCard
     ? { backgroundColor: produto.fundoCard }
     : undefined;
 
   function aoAdicionar() {
     adicionar(produto.slug, acabamento, quantidade);
+    adicionarAoCarrinho(itemDoProduto(produto, quantidade, acabamento));
     setAdicionado(true);
     window.setTimeout(() => setAdicionado(false), 2500);
   }
@@ -36,14 +51,21 @@ export function CompraProduto({ produto }: { produto: Produto }) {
           style={fundo}
         >
           {!produto.fundoCard && <div className="halo-ouro absolute inset-0" />}
-          <Image
-            src={produto.imagens[imagemAtiva]}
-            alt={produto.nome}
-            fill
-            sizes="(max-width: 1024px) 100vw, 50vw"
-            className="object-contain"
-            priority
-          />
+          {/* Peça ainda sem foto não pode quebrar a página. */}
+          {produto.imagens[imagemAtiva] ? (
+            <Image
+              src={produto.imagens[imagemAtiva]}
+              alt={produto.nome}
+              fill
+              sizes="(max-width: 1024px) 100vw, 50vw"
+              className="object-contain"
+              priority
+            />
+          ) : (
+            <div className="absolute inset-0 flex items-center justify-center text-sm text-creme-fraco/50">
+              foto em breve
+            </div>
+          )}
         </div>
 
         {produto.imagens.length > 1 && (

@@ -24,14 +24,25 @@ export function CardProduto({
         }
       >
         <div className="halo-ouro absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
-        <Image
-          src={imagemCard(produto.imagens[0])}
-          alt={produto.nome}
-          fill
-          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-          className="object-contain transition-transform duration-500 group-hover:scale-[1.04]"
-          priority={prioridade}
-        />
+        {/*
+          Peça sem foto não pode derrubar a página: o componente de imagem do
+          Next quebra com src indefinido, e isso levaria a loja inteira junto.
+          Mostramos um espaço discreto em vez de falhar.
+        */}
+        {produto.imagens[0] ? (
+          <Image
+            src={imagemCard(produto.imagens[0])}
+            alt={produto.nome}
+            fill
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            className="object-contain transition-transform duration-500 group-hover:scale-[1.04]"
+            priority={prioridade}
+          />
+        ) : (
+          <div className="absolute inset-0 flex items-center justify-center text-xs text-creme-fraco/50">
+            foto em breve
+          </div>
+        )}
       </div>
 
       <div className="flex flex-1 flex-col p-5">
