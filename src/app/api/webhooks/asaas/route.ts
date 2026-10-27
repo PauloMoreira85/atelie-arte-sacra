@@ -113,9 +113,15 @@ export async function POST(request: Request) {
   after(async () => {
     try {
       if (evento.event === "CHECKOUT_PAID") {
-        const { error } = await db()
+        const { error, count } = await db()
           .from("pedidos")
-          .update({ status: "pago", pago_em: new Date().toISOString() })
+          .update(
+            { status: "pago", pago_em: new Date().toISOString() },
+            // Queremos saber QUANTAS linhas mudaram. Sem isso, um update que
+            // não encontra nada volta como sucesso — e um pedido pago que
+            // nunca foi gravado passaria despercebido.
+            { count: "exact" },
+          )
           .eq("referencia", referencia)
           // Só sai de "aberto". O evento pode chegar duas vezes (a Asaas
           // entrega "pelo menos uma vez"), e sem isso o pago_em seria
@@ -124,6 +130,18 @@ export async function POST(request: Request) {
 
         if (error) {
           console.error("[webhook] não marcou como pago:", referencia, error.message);
+          return;
+        }
+
+        if (count === 0) {
+          // Ou é reenvio de um evento já processado (normal), ou o pedido
+          // nunca chegou à nossa tabela (grave: há dinheiro entrando sem
+          // registro). Conferir pela referência no extrato da Asaas.
+          console.warn(
+            "[webhook] CHECKOUT_PAID não encontrou pedido aberto:",
+            referencia,
+            "— reenvio, ou o checkout não foi gravado?",
+          );
           return;
         }
 
