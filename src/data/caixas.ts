@@ -20,13 +20,7 @@ export type Caixa = {
   comprimento: number;
   /** Quantas peças cabem dentro. */
   capacidade: number;
-  /**
-   * Peso da caixa vazia com o plástico-bolha, em gramas.
-   *
-   * ⚠️ ESTIMATIVA — papelão de 20 × 20 pesa uns 150 g, mais o bolha. Pese uma
-   * caixa montada e troque: o Melhor Envio cobra pelo peso despachado, e o
-   * que faltar aqui sai do bolso da loja em cada venda.
-   */
+  /** Peso da caixa vazia com o plástico-bolha, em gramas. ✅ pesado. */
   taraG: number;
 };
 
@@ -36,7 +30,7 @@ export const CAIXA_MENOR: Caixa = {
   largura: 20,
   comprimento: 20,
   capacidade: 1,
-  taraG: 150,
+  taraG: 100,
 };
 
 export const CAIXA_MAIOR: Caixa = {
@@ -45,7 +39,7 @@ export const CAIXA_MAIOR: Caixa = {
   largura: 20,
   comprimento: 20,
   capacidade: 2,
-  taraG: 220,
+  taraG: 130,
 };
 
 /** Volume a despachar: uma caixa e o que vai dentro dela. */
