@@ -40,6 +40,37 @@ export const LOJA = {
    * prometer 6x na página e a Asaas só aceitar 3x é briga na hora de pagar.
    */
   parcelasMax: 3,
+
+  /**
+   * NOTA FISCAL
+   *
+   * Quem emite não é o "Ateliê Arte Sacra" — isso é a marca do site. É a
+   * PCS Moreira, a empresa por trás dele, a mesma da Só Filamentos. Nota sai
+   * por CNPJ, não por marca, e as duas lojas dividem o mesmo cadastro no
+   * Base. Por isso o código de produto leva prefixo AAS-: evita colidir com
+   * os MP-FILAMENTO que já estão lá.
+   *
+   * A PCS Moreira é ME, não MEI — então NÃO tem a dispensa de emitir para
+   * pessoa física. Toda venda emite, inclusive para quem não pediu.
+   */
+  fiscal: {
+    cnpj: "22771295000132",
+    razaoSocial: "PCS Moreira",
+    /** Prefixo do código de produto no Base, para não colidir com a outra loja. */
+    prefixoProduto: "AAS-",
+    /**
+     * NCM das peças.
+     *
+     * 3916.90.10 é o que o Base já usa nos filamentos — mas aqueles são
+     * MATÉRIA-PRIMA em rolo, e o que vendemos é a peça acabada. A posição
+     * 3926 ("outras obras de plástico") pode ser a correta para estatueta
+     * decorativa.
+     *
+     * CONFIRMAR COM O CONTADOR. Trocar aqui vale para as próximas notas; as
+     * já emitidas guardam o NCM da época em pedido_itens.ncm.
+     */
+    ncmPadrao: "39169010",
+  },
 } as const;
 
 export const linkWhatsApp = (mensagem: string) =>

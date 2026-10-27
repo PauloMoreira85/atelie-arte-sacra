@@ -230,21 +230,51 @@ valor como estimado para o cliente. Você acerta a diferença no envio.
 
 ## 🧾 Nota fiscal
 
-⚠️ **Importante para Colatina-ES:** o Decreto nº 6.335-R/2026 tornou
-obrigatório, desde 01/04/2026, que MEI com atividade sujeita a ICMS tenha
-**Inscrição Estadual** e **emita documento fiscal eletrônico**. Venda de peça
-impressa em 3D é mercadoria, ou seja, operação com ICMS.
+**Quem emite é a PCS Moreira**, CNPJ 22.771.295/0001-32 — a mesma empresa da
+Só Filamentos. "Ateliê Arte Sacra" é a marca do site, não uma empresa
+separada: nota sai por CNPJ, não por marca.
 
-Confirme com seu contador se a sua CNAE está na lista e se a Inscrição
-Estadual já está ativa.
+A PCS Moreira é **ME, não MEI**. Isso importa: o MEI tem dispensa de emitir
+para pessoa física, a ME **não tem**. Toda venda emite NF-e, inclusive para
+quem não pediu.
 
-Para emitir, o plano é usar o **Base by Asaas**, que já é usado em outros
-projetos. Para e-commerce com entrega por transportadora o modelo correto é
-**NF-e 55** (a NFC-e 65 não cobre venda interestadual).
+### O que já está pronto
 
-Alternativas gratuitas oferecidas pelo próprio ES, caso queira começar sem
-custo: app **Nota Fiscal Fácil (NFF)** — emite pelo celular, sem certificado
-digital — e o emissor gratuito do SEBRAE.
+1. **Tabela `pedidos`** — grava o que foi vendido, para quem e por quanto.
+   Antes o site mandava o checkout para a Asaas e esquecia. Veja
+   `criar-pedidos.sql`.
+2. **Webhook `/api/webhooks/asaas`** — quando o cliente paga, marca o pedido
+   como pago e **busca o endereço de entrega na Asaas**. O carrinho não pede
+   rua e número (quem coleta é a tela da Asaas), e a NF-e não sai sem o
+   endereço do destinatário.
+
+### O que falta
+
+3. **Emitir a nota no Base** — criar o pedido de venda e disparar a NF-e 55.
+   (A NFC-e 65 não serve: não cobre venda interestadual.)
+
+### Configurar o webhook na Asaas
+
+Sem isso, nenhum pedido sai de "aberto".
+
+1. Asaas → **Integrações → Webhooks → Adicionar**
+2. URL: `https://atelieartesacra.com.br/api/webhooks/asaas`
+3. Token de autenticação: o mesmo valor de `ASAAS_WEBHOOK_TOKEN`
+4. Eventos: `CHECKOUT_PAID`, `CHECKOUT_CANCELED`, `CHECKOUT_EXPIRED`
+
+A variável `ASAAS_WEBHOOK_TOKEN` precisa existir **no Vercel também**, não só
+no `.env.local`.
+
+### ⚠️ NCM a confirmar
+
+As peças estão saindo com NCM **3916.90.10**, que é o que o Base já usa nos
+filamentos. Mas aqueles são *matéria-prima em rolo* e o que vendemos é *peça
+acabada* — a posição **3926** ("outras obras de plástico") pode ser a correta
+para estatueta decorativa.
+
+**Pergunte ao contador.** Para trocar, edite `fiscal.ncmPadrao` em
+`src/data/loja.ts`. Vale para as próximas notas; as já emitidas guardam o NCM
+da época em `pedido_itens.ncm`.
 
 ---
 

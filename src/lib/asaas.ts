@@ -140,3 +140,51 @@ export async function criarCheckout(
   }
   return json;
 }
+
+/**
+ * Endereço de entrega do cliente, do jeito que a Asaas devolve.
+ *
+ * Nasceu da NF-e: a PCS Moreira é ME e emite nota em toda venda, e nota exige
+ * o endereço completo do destinatário. O carrinho não pede rua e número — quem
+ * coleta é a tela da Asaas (veja o comentário em criarCheckout). Então é de lá
+ * que buscamos, depois que o pagamento confirma.
+ */
+export type ClienteAsaas = {
+  name: string;
+  cpfCnpj: string;
+  email: string | null;
+  phone: string | null;
+  mobilePhone: string | null;
+  postalCode: string | null;
+  address: string | null;
+  addressNumber: string | null;
+  complement: string | null;
+  /** Bairro. O nome vem assim da API deles. */
+  province: string | null;
+  cityName: string | null;
+  state: string | null;
+};
+
+/**
+ * Busca um cliente pelo id (cus_...) que vem no evento CHECKOUT_PAID.
+ *
+ * Docs: https://docs.asaas.com/reference/recuperar-um-unico-cliente
+ */
+export async function buscarCliente(id: string): Promise<ClienteAsaas> {
+  const { apiKey, baseUrl } = config();
+
+  const resposta = await fetch(`${baseUrl}/customers/${encodeURIComponent(id)}`, {
+    headers: {
+      access_token: apiKey,
+      "User-Agent": "AtelieArteSacra/1.0",
+    },
+    cache: "no-store",
+  });
+
+  const texto = await resposta.text();
+  if (!resposta.ok) {
+    throw new Error(`Asaas ${resposta.status} ao buscar cliente: ${texto.slice(0, 200)}`);
+  }
+
+  return JSON.parse(texto) as ClienteAsaas;
+}

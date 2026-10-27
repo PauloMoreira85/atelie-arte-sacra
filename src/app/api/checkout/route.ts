@@ -80,6 +80,71 @@ async function registrarOrigem(
   }
 }
 
+/** Uma peça do pedido, do jeito que vai para a tabela pedido_itens. */
+type ItemGravado = {
+  produto_slug: string;
+  produto_nome: string;
+  acabamento: string;
+  quantidade: number;
+  preco_centavos: number;
+  ncm: string;
+};
+
+/**
+ * Grava o pedido e seus itens. É o único registro PRÓPRIO da venda: sem ele
+ * só existe o extrato da Asaas, que diz quanto entrou mas não o que saiu.
+ *
+ * A PCS Moreira é ME, e ME emite nota em toda venda — então o que está aqui
+ * é o que vai virar NF-e depois que o pagamento confirmar.
+ *
+ * Nunca derruba a venda: se a tabela ainda não existe (veja criar-pedidos.sql)
+ * ou o banco falhar, o cliente paga do mesmo jeito e o erro fica no log. Um
+ * pedido sem registro se resolve à mão; uma venda perdida, não.
+ */
+async function registrarPedido(pedido: {
+  referencia: string;
+  subtotalCentavos: number;
+  freteCentavos: number;
+  cliente: { nome: string; email: string; telefone: string; cpfCnpj: string };
+  frete: { servico: string | null; prazoDias: number | null };
+  itens: ItemGravado[];
+}) {
+  if (!supabaseConfigurado()) return;
+
+  try {
+    const { error: erroPedido } = await db().from("pedidos").insert({
+      referencia: pedido.referencia,
+      status: "aberto",
+      subtotal_centavos: pedido.subtotalCentavos,
+      frete_centavos: pedido.freteCentavos,
+      total_centavos: pedido.subtotalCentavos + pedido.freteCentavos,
+      cliente_nome: pedido.cliente.nome,
+      cliente_email: pedido.cliente.email,
+      cliente_telefone: pedido.cliente.telefone,
+      cliente_cpf_cnpj: pedido.cliente.cpfCnpj,
+      frete_servico: pedido.frete.servico,
+      frete_prazo_dias: pedido.frete.prazoDias,
+    });
+
+    if (erroPedido) {
+      console.warn("[checkout] não gravou o pedido:", erroPedido.message);
+      return;
+    }
+
+    // Só insere os itens depois que o pedido existe: a chave estrangeira os
+    // rejeitaria, e item órfão não ajuda ninguém.
+    const { error: erroItens } = await db()
+      .from("pedido_itens")
+      .insert(pedido.itens.map((i) => ({ referencia: pedido.referencia, ...i })));
+
+    if (erroItens) {
+      console.warn("[checkout] não gravou os itens:", erroItens.message);
+    }
+  } catch (erro) {
+    console.warn("[checkout] não gravou o pedido:", erro);
+  }
+}
+
 const soDigitos = (s: string) => s.replace(/\D/g, "");
 
 /** Valida CPF (11) ou CNPJ (14) pelos dígitos verificadores. */
@@ -168,6 +233,9 @@ export async function POST(request: Request) {
 
   // ── Itens: preço sempre do catálogo do servidor ───────────────────────────
   const itensCheckout: ItemCheckout[] = [];
+  // Os mesmos itens, do jeito que vão para o nosso banco. Montados aqui
+  // dentro do loop porque é onde o produto já foi validado contra o catálogo.
+  const itensGravados: ItemGravado[] = [];
   let subtotalCentavos = 0;
   const catalogo = await listarProdutos();
 
@@ -203,6 +271,17 @@ export async function POST(request: Request) {
       quantity: quantidade,
       value: produto.preco / 100, // Asaas espera reais
     });
+
+    itensGravados.push({
+      produto_slug: produto.slug,
+      produto_nome: produto.nome,
+      acabamento,
+      quantidade,
+      // Preço do momento da venda. Se a peça mudar de preço depois, a nota
+      // tem que sair com o que o cliente realmente pagou.
+      preco_centavos: produto.preco,
+      ncm: LOJA.fiscal.ncmPadrao,
+    });
   }
 
   // ── Frete ─────────────────────────────────────────────────────────────────
@@ -211,6 +290,12 @@ export async function POST(request: Request) {
   // R$ 1,00 de SEDEX.
   let freteCentavos = 0;
   let descricaoFrete = "Envio para todo o Brasil";
+  // Guardados para o nosso registro do pedido: o prazo é o que você promete
+  // ao cliente, e é por esse nome que a etiqueta é comprada no Melhor Envio.
+  // Ficam nulos quando o pedido passa do valor de frete grátis: aí não há
+  // serviço escolhido. Nulo e não "" para não confundir com falha de gravação.
+  let servicoFrete: string | null = null;
+  let prazoFrete: number | null = null;
 
   if (subtotalCentavos < LOJA.freteGratisAcima) {
     const cepEntrega = soDigitos(corpo?.frete?.cep ?? "");
@@ -254,6 +339,8 @@ export async function POST(request: Request) {
         ? `${escolhida.empresa} ${escolhida.nome}`
         : escolhida.nome;
       descricaoFrete = `${servico} — até ${escolhida.prazoDias} dias úteis após a produção`;
+      servicoFrete = servico;
+      prazoFrete = escolhida.prazoDias;
     } catch (erro) {
       // Preferimos barrar a venda a cobrar um frete inventado: o prejuízo de
       // um envio mal cobrado é maior que o de um pedido adiado por minutos.
@@ -304,7 +391,21 @@ export async function POST(request: Request) {
     });
 
     const totalCentavos = subtotalCentavos + freteCentavos;
-    await registrarOrigem(referencia, totalCentavos, limparOrigem(corpo.origem));
+
+    // Depois de criar na Asaas: só registramos pedido que o cliente de fato
+    // conseguiu abrir. Os dois gravam em paralelo porque nenhum depende do
+    // outro, e nenhum dos dois derruba a venda se falhar.
+    await Promise.all([
+      registrarPedido({
+        referencia,
+        subtotalCentavos,
+        freteCentavos,
+        cliente: { nome, email, telefone, cpfCnpj },
+        frete: { servico: servicoFrete, prazoDias: prazoFrete },
+        itens: itensGravados,
+      }),
+      registrarOrigem(referencia, totalCentavos, limparOrigem(corpo.origem)),
+    ]);
 
     // valor/frete voltam para o browser medir a compra com o total que a
     // Asaas vai cobrar (o frete foi recotado aqui).
