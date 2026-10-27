@@ -1,5 +1,6 @@
 import "server-only";
 import { listarProdutos } from "@/lib/catalogo";
+import { montarVolumes } from "@/data/caixas";
 
 /**
  * Cliente da API do Melhor Envio. Roda SOMENTE no servidor — o token nunca
@@ -86,30 +87,45 @@ export async function cotarFrete(
     throw new Error("CEP de destino inválido.");
   }
 
-  // Monta a lista de produtos a partir do catálogo do servidor. O browser
-  // manda só slug e quantidade — peso e medidas nunca vêm dele, senão
-  // alguém poderia forjar uma caixa de 1g para pagar frete mínimo.
+  // Peso e valor de cada UNIDADE do pedido, lidos do catálogo do servidor.
+  // O browser manda só slug e quantidade — se ele mandasse peso ou medida,
+  // alguém poderia forjar uma caixa de 1 g e pagar frete mínimo.
   const catalogo = await listarProdutos();
-  const produtos = itens.flatMap((item) => {
+  const pesosG: number[] = [];
+  let valorSegurado = 0;
+
+  for (const item of itens) {
     const p = catalogo.find((x) => x.slug === item.slug);
-    if (!p) return [];
+    if (!p) continue;
 
     const quantidade = Math.max(1, Math.min(99, Math.trunc(item.quantidade)));
+    for (let i = 0; i < quantidade; i++) pesosG.push(p.envio.pesoG);
+    valorSegurado += (p.preco / 100) * quantidade;
+  }
 
-    return [{
-      id: p.slug,
-      width: p.envio.caixa.largura,
-      height: p.envio.caixa.altura,
-      length: p.envio.caixa.comprimento,
-      weight: p.envio.pesoG / 1000, // a API espera quilos
-      insurance_value: Number((p.preco / 100).toFixed(2)),
-      quantity: quantidade,
-    }];
-  });
-
-  if (produtos.length === 0) {
+  if (pesosG.length === 0) {
     throw new Error("Nenhum produto válido para cotar.");
   }
+
+  // As peças vão nas DUAS caixas que a loja tem de verdade, não numa caixa
+  // por peça. Cotar uma caixa por peça fazia um pedido de duas virar dois
+  // volumes — dois fretes para o cliente, sendo que as duas vão na mesma
+  // caixa maior.
+  const volumes = montarVolumes(pesosG);
+
+  // O seguro é do pedido inteiro, então é rateado entre os volumes: somar o
+  // valor cheio em cada um cobraria seguro múltiplas vezes.
+  const seguroPorVolume = valorSegurado / volumes.length;
+
+  const produtos = volumes.map((v, i) => ({
+    id: `volume-${i + 1}`,
+    width: v.caixa.largura,
+    height: v.caixa.altura,
+    length: v.caixa.comprimento,
+    weight: v.pesoG / 1000, // a API espera quilos
+    insurance_value: Number(seguroPorVolume.toFixed(2)),
+    quantity: 1,
+  }));
 
   const resposta = await fetch(`${baseUrl}/api/v2/me/shipment/calculate`, {
     method: "POST",

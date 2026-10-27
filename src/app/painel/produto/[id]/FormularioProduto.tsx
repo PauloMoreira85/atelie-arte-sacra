@@ -175,13 +175,13 @@ export function FormularioProduto({
 
       <fieldset>
         <legend className="mb-2 text-sm uppercase tracking-widest text-ouro-claro">
-          Caixa de envio
+          Peso para o frete
         </legend>
         <p className="mb-3 text-xs text-creme-fraco">
-          Da caixa fechada, com a embalagem — é isso que calcula o frete. Os
-          Correios cobram pelo maior valor entre o peso real e o cubado
-          (A × L × C ÷ 6000), então medir a mais sai caro, e a menos sai do seu
-          bolso.
+          <strong className="text-creme-suave">O peso é o que importa aqui.</strong>{" "}
+          Pese a peça embalada: é ele que entra na cotação, e peso a menos sai do
+          seu bolso em cada venda. As medidas da caixa abaixo não são mais usadas
+          no frete — ele usa as duas caixas da loja (veja src/data/caixas.ts).
         </p>
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
           <label className="block">
