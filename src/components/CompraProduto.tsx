@@ -118,10 +118,23 @@ export function CompraProduto({ produto }: { produto: Produto }) {
           ))}
         </div>
 
-        {produto.acabamentos.length > 1 && (
+        {/*
+          Quase toda peça tem UM acabamento só: as cores (mármore, dourado,
+          vermelho) são como ela foi feita, não opções de escolha. Nesse caso
+          a gente informa, não pergunta. Os botões só aparecem na peça que
+          realmente é produzida em mais de uma versão.
+        */}
+        {produto.acabamentos.length === 1 ? (
+          <p className="mt-8 text-sm text-creme-suave">
+            <span className="uppercase tracking-widest text-ouro-claro">
+              Acabamento
+            </span>{" "}
+            · {produto.acabamentos[0]}
+          </p>
+        ) : (
           <fieldset className="mt-8">
             <legend className="mb-3 text-sm uppercase tracking-widest text-ouro-claro">
-              Acabamento
+              Escolha o acabamento
             </legend>
             <div className="flex flex-wrap gap-2">
               {produto.acabamentos.map((a) => (
@@ -189,9 +202,15 @@ export function CompraProduto({ produto }: { produto: Produto }) {
         <dl className="mt-8 space-y-2 border-t border-ouro/15 pt-6 text-sm">
           <div className="flex gap-2">
             <dt className="text-creme-fraco">Medidas aproximadas:</dt>
+            {/*
+              Nem toda peça tem profundidade medida — mostrar "× 0 cm" faria
+              a peça parecer plana. Sem o valor, exibe só altura × largura.
+            */}
             <dd className="text-creme-suave">
-              {produto.medidas.altura} × {produto.medidas.largura} ×{" "}
-              {produto.medidas.profundidade} cm
+              {produto.medidas.altura} × {produto.medidas.largura}
+              {produto.medidas.profundidade > 0 &&
+                ` × ${produto.medidas.profundidade}`}{" "}
+              cm
             </dd>
           </div>
           <div className="flex gap-2">

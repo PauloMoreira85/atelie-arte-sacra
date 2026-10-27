@@ -49,10 +49,10 @@ export async function salvarProduto(
     };
   }
 
-  const acabamentos = String(dados.get("acabamentos") ?? "")
-    .split(",")
-    .map((s) => s.trim())
-    .filter(Boolean);
+  // Uma linha por acabamento, NÃO separado por vírgula: "Mármore, dourado e
+  // vermelho" é o acabamento único de uma peça, e a vírgula viraria três
+  // opções de escolha para o cliente — pedido que ninguém produz.
+  const acabamentos = linhas(dados.get("acabamentos"));
   if (acabamentos.length === 0) {
     return { erro: "Informe ao menos um acabamento." };
   }

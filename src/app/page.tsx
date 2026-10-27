@@ -98,7 +98,7 @@ export default async function Home() {
             {
               n: "01",
               t: "Você escolhe",
-              d: "Escolhe a peça, o acabamento e fecha o pedido pelo site, com Pix ou cartão.",
+              d: "Escolhe a peça e fecha o pedido pelo site, com Pix ou cartão.",
             },
             {
               n: "02",

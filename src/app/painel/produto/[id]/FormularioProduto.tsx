@@ -120,12 +120,13 @@ export function FormularioProduto({
       </label>
 
       <label className="block">
-        <Rotulo dica="Separe por vírgula, ex: Dourado, Cobre">
-          Acabamentos
+        <Rotulo dica="Como a peça é feita, ex: Mármore, dourado e vermelho. Só use mais de uma LINHA se a peça for produzida em versões diferentes — aí o cliente escolhe.">
+          Acabamento
         </Rotulo>
-        <input
+        <textarea
           name="acabamentos"
-          defaultValue={produto.acabamentos.join(", ")}
+          defaultValue={produto.acabamentos.join("\n")}
+          rows={2}
           required
           className={campo}
         />

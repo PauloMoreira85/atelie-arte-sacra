@@ -42,7 +42,12 @@ export type Produto = {
     /** Medidas da caixa fechada, em cm. */
     caixa: { altura: number; largura: number; comprimento: number };
   };
-  /** Cores/acabamentos que o cliente escolhe no pedido. */
+  /**
+   * Como a peça É FEITA — "Mármore, dourado e vermelho" são as cores do
+   * acabamento dela, não opções de escolha. Por isso quase sempre tem um
+   * valor só, e a página mostra em vez de perguntar. Mais de um valor só
+   * na peça que é realmente produzida em versões diferentes.
+   */
   acabamentos: string[];
   imagens: string[];
   /** Aparece com selo de destaque na home. */
@@ -122,14 +127,14 @@ export const PRODUTOS: Produto[] = [
     resumo: "Cristo de cabeça baixa, com coroa de espinhos.",
     descricao: [
       "Cristo com a cabeça inclinada e a coroa de espinhos entrelaçada aos cabelos. Os fios da barba e do cabelo saem definidos um a um — é a peça que melhor mostra o nível de detalhe que conseguimos na impressão.",
-      "O acabamento metálico muda muito com a luz do ambiente: o dourado puxa para o quente e o cobre para o avermelhado. Escolha o acabamento no pedido.",
+      "Acabada à mão em dourado, que muda de tom conforme a luz do ambiente.",
     ],
     medidas: { altura: 20, largura: 14, profundidade: 11 }, // REVISAR
     envio: {
       pesoG: 850, // REVISAR: pesar a caixa real
       caixa: { altura: 26, largura: 20, comprimento: 17 }, // REVISAR
     },
-    acabamentos: ["Dourado", "Cobre"],
+    acabamentos: ["Dourado"],
     imagens: ["/produtos/busto-cristo-dourado.webp"],
     destaque: true,
     prazoProducao: 7,
