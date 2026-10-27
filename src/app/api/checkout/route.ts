@@ -294,7 +294,7 @@ export async function POST(request: Request) {
         cancelado: `${origem}/carrinho?status=cancelado`,
         expirado: `${origem}/carrinho?status=expirado`,
       },
-      parcelasMax: 6,
+      parcelasMax: LOJA.parcelasMax,
     });
 
     const totalCentavos = subtotalCentavos + freteCentavos;

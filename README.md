@@ -10,7 +10,7 @@ devocionais e lembrancinhas, produzidas sob encomenda.
 
 - **Next.js 16** (App Router) + **React 19** + **TypeScript**
 - **Tailwind CSS 4** — paleta tirada da logo (dourado, creme, marrom)
-- **Asaas** — checkout hospedado com Pix, cartão e boleto
+- **Asaas** — checkout hospedado com Pix e cartão (parcelas em `LOJA.parcelasMax`)
 - Carrinho no `localStorage`, sem banco de dados
 - **GA4 + Google Ads + Meta Pixel** — eventos de e-commerce para tráfego
   pago; IDs por variável de ambiente (veja COMO-EDITAR.md → Rastreamento de

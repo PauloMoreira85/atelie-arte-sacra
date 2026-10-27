@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { useCarrinho } from "@/lib/carrinho";
 import { formatarPreco, type Produto } from "@/data/produtos";
+import { LOJA } from "@/data/loja";
 import {
   adicionarAoCarrinho,
   itemDoProduto,
@@ -12,7 +13,7 @@ import {
 } from "@/lib/rastreamento";
 
 /**
- * Galeria + escolha de acabamento e quantidade + adicionar ao carrinho.
+ * Galeria + quantidade + adicionar ao carrinho.
  * Client component porque mexe no carrinho e troca a imagem em destaque.
  */
 export function CompraProduto({ produto }: { produto: Produto }) {
@@ -107,7 +108,8 @@ export function CompraProduto({ produto }: { produto: Produto }) {
           {formatarPreco(produto.preco)}
         </p>
         <p className="mt-1 text-sm text-creme-fraco">
-          em até 6x sem juros no cartão · Pix com desconto no checkout
+          em até {LOJA.parcelasMax}x sem juros no cartão · Pix com desconto no
+          checkout
         </p>
 
         <div className="my-7 filete-ouro" />

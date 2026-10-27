@@ -393,7 +393,7 @@ export function CarrinhoCliente() {
           </form>
 
           <p className="mt-4 text-center text-xs text-creme-fraco">
-            Pix, cartão em até 6x ou boleto.
+            Pix ou cartão em até {LOJA.parcelasMax}x.
           </p>
 
           <div className="my-5 filete-ouro" />

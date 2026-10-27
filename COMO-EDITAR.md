@@ -49,7 +49,7 @@ integrado — veja a seção **Ativar o frete calculado** mais abaixo.
 
 ## 💳 Ativar o pagamento
 
-O site está pronto para receber Pix, cartão e boleto pela Asaas, mas ainda sem
+O site está pronto para receber Pix e cartão pela Asaas, mas ainda sem
 a chave. **Enquanto a chave não for preenchida, o site funciona normalmente** e
 o botão de pagamento avisa o cliente para fechar pelo WhatsApp.
 

@@ -31,6 +31,15 @@ export const LOJA = {
 
   /** Frete grátis a partir deste valor, em centavos. */
   freteGratisAcima: 40000,
+
+  /**
+   * Máximo de parcelas sem juros no cartão.
+   *
+   * Fica aqui porque o número aparece no texto que o cliente lê E no limite
+   * que vai para a Asaas. Estavam escritos separados e podiam discordar —
+   * prometer 6x na página e a Asaas só aceitar 3x é briga na hora de pagar.
+   */
+  parcelasMax: 3,
 } as const;
 
 export const linkWhatsApp = (mensagem: string) =>

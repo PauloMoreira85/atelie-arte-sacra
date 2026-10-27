@@ -4,7 +4,7 @@ import "server-only";
  * Cliente da API Asaas. Roda SOMENTE no servidor — a chave nunca vai ao browser.
  *
  * Usamos o Checkout hospedado (POST /v3/checkouts): a Asaas devolve um link,
- * redirecionamos o cliente para lá e ele paga com Pix, cartão ou boleto na
+ * redirecionamos o cliente para lá e ele paga com Pix ou cartão na
  * página deles. Assim nenhum dado de cartão passa pelo nosso servidor, o que
  * nos tira totalmente do escopo de PCI.
  *
