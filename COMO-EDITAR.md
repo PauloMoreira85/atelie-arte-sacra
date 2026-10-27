@@ -248,10 +248,21 @@ quem não pediu.
    rua e número (quem coleta é a tela da Asaas), e a NF-e não sai sem o
    endereço do destinatário.
 
+3. **Emissão da NF-e** — em `Painel → Pedidos e notas`, cada pedido pago
+   ganha um botão **Emitir nota**. Cria o pedido de venda no Base e dispara a
+   NF-e 55 (a NFC-e 65 não serve: não cobre venda interestadual).
+
+   É **manual de propósito**. Nota errada não se apaga: cancela (prazo curto)
+   ou carta de correção. Confira as primeiras e, quando estiver claro que sai
+   certo, dá para passar a emissão para o webhook e virar automático.
+
+   Se a SEFAZ ainda estiver processando, aparece um botão **Atualizar** que
+   relê a situação. Rejeição aparece em vermelho no próprio pedido.
+
 ### O que falta
 
-3. **Emitir a nota no Base** — criar o pedido de venda e disparar a NF-e 55.
-   (A NFC-e 65 não serve: não cobre venda interestadual.)
+4. **Emitir a primeira nota de verdade** — nunca foi emitida nesta conta do
+   Base. Vale fazer a primeira com alguém olhando.
 
 ### Configurar o webhook na Asaas
 

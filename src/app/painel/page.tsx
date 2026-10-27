@@ -46,14 +46,22 @@ export default async function PainelPage() {
           </p>
         </div>
 
-        <form action={acaoSair}>
-          <button
-            type="submit"
+        <div className="flex items-center gap-3">
+          <Link
+            href="/painel/pedidos"
             className="rounded-full border border-ouro/30 px-4 py-2 text-sm text-creme-suave transition-colors hover:border-ouro hover:text-ouro-claro"
           >
-            Sair
-          </button>
-        </form>
+            Pedidos e notas
+          </Link>
+          <form action={acaoSair}>
+            <button
+              type="submit"
+              className="rounded-full border border-ouro/30 px-4 py-2 text-sm text-creme-suave transition-colors hover:border-ouro hover:text-ouro-claro"
+            >
+              Sair
+            </button>
+          </form>
+        </div>
       </header>
 
       <ul className="space-y-3">
