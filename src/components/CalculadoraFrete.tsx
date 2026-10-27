@@ -151,7 +151,14 @@ export function CalculadoraFrete() {
                       }`}
                     >
                       <span>
-                        <span className="text-creme">{o.nome}</span>
+                        {/*
+                          A transportadora vem junto do serviço: ".Package
+                          Centralizado" sozinho não diz nada ao cliente, e
+                          agora cotamos Jadlog, Loggi e JeT além dos Correios.
+                        */}
+                        <span className="text-creme">
+                          {o.empresa ? `${o.empresa} ${o.nome}` : o.nome}
+                        </span>
                         <span className="block text-xs text-creme-fraco">
                           {o.prazoDias} dias úteis após a produção
                         </span>

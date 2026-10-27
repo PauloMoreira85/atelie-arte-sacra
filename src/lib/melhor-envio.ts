@@ -17,8 +17,19 @@ import { montarVolumes } from "@/data/caixas";
 const SANDBOX_URL = "https://sandbox.melhorenvio.com.br";
 const PRODUCAO_URL = "https://melhorenvio.com.br";
 
-/** Serviços cotados: 1 = PAC, 2 = SEDEX, 17 = Mini Envios. */
-const SERVICOS = "1,2,17";
+/**
+ * Quantas opções de frete o cliente vê, da mais barata para a mais cara.
+ *
+ * Não filtramos por transportadora: a conta tem Jadlog, Loggi, JeT, Azul,
+ * LATAM e Total Express além dos Correios, e em geral elas saem MUITO mais
+ * baratas. Numa cotação real de duas peças para Colatina, a Jadlog saiu a
+ * R$ 22,92 em 6 dias contra R$ 68,61 do PAC em 8 — três vezes o preço e dois
+ * dias a mais. Cotar só Correios era esconder a opção boa do cliente.
+ *
+ * O limite existe porque a lista cheia passa de dez linhas e vira ruído na
+ * hora de escolher.
+ */
+const MAX_OPCOES = 4;
 
 export function melhorEnvioConfigurado() {
   return Boolean(
@@ -141,7 +152,6 @@ export async function cotarFrete(
       to: { postal_code: cep },
       products: produtos,
       options: { receipt: false, own_hand: false },
-      services: SERVICOS,
     }),
     cache: "no-store",
   });
@@ -184,5 +194,5 @@ export async function cotarFrete(
     }];
   });
 
-  return opcoes.sort((a, b) => a.preco - b.preco);
+  return opcoes.sort((a, b) => a.preco - b.preco).slice(0, MAX_OPCOES);
 }

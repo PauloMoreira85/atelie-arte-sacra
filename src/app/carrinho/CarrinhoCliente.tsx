@@ -299,7 +299,11 @@ export function CarrinhoCliente() {
               <dt className="text-creme-fraco">
                 Frete
                 {freteEscolhido && frete > 0 && (
-                  <span className="block text-xs">{freteEscolhido.nome}</span>
+                  <span className="block text-xs">
+                    {freteEscolhido.empresa
+                      ? `${freteEscolhido.empresa} ${freteEscolhido.nome}`
+                      : freteEscolhido.nome}
+                  </span>
                 )}
               </dt>
               <dd className="text-creme-suave">

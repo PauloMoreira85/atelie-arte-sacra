@@ -247,7 +247,13 @@ export async function POST(request: Request) {
       }
 
       freteCentavos = escolhida.preco;
-      descricaoFrete = `${escolhida.nome} — até ${escolhida.prazoDias} dias úteis após a produção`;
+      // Com a transportadora no nome: é o que o cliente leu no carrinho, e é
+      // por essa descrição que você identifica o envio na hora de comprar a
+      // etiqueta no Melhor Envio.
+      const servico = escolhida.empresa
+        ? `${escolhida.empresa} ${escolhida.nome}`
+        : escolhida.nome;
+      descricaoFrete = `${servico} — até ${escolhida.prazoDias} dias úteis após a produção`;
     } catch (erro) {
       // Preferimos barrar a venda a cobrar um frete inventado: o prejuízo de
       // um envio mal cobrado é maior que o de um pedido adiado por minutos.
