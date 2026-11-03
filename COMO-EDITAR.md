@@ -11,10 +11,10 @@ Estes valores são placeholders. O site funciona com eles, mas estão errados.
 ### 1. Contato e redes — `src/data/loja.ts`
 
 ```ts
-whatsapp: "5527992314183",        // ✅ já configurado
+whatsapp: "5544997516489",        // ✅ já configurado
 instagram: "atelie.arte.sacra",   // ✅ já configurado
 email: "contato@atelieartesacra.com.br",  // ← TROCAR se usar outro
-cidade: "Colatina - Espírito Santo",  // ✅ já configurado
+cidade: "Enviamos de Maringá - PR",  // ✅ já configurado
 url: "https://atelieartesacra.com.br",  // ✅ já configurado
 ```
 
